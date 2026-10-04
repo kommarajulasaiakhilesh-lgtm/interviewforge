@@ -1,0 +1,37 @@
+# InterviewForge
+
+InterviewForge is an adaptive interview preparation platform. This repository contains its Spring Boot API; the user interface will be built separately in Lovable.
+
+## Stack
+
+- Java 21 and Spring Boot 4.1.1
+- Maven
+- PostgreSQL with Flyway migrations
+- Spring MVC REST API, Spring Data JPA, and Actuator
+
+## Local setup
+
+Install Java 21 or newer, Maven 3.6.3 or newer, and PostgreSQL. Start the PostgreSQL Windows service and create a database named `interviewforge` using pgAdmin or `createdb`. Copy `.env.example` to `.env` and set `DB_USERNAME` and `DB_PASSWORD` to a PostgreSQL account that can access the database. Then run:
+
+```powershell
+Copy-Item .env.example .env
+mvn spring-boot:run
+```
+
+The API listens on `http://localhost:8080`. Its health endpoint is `http://localhost:8080/actuator/health`.
+
+Set `APP_CORS_ALLOWED_ORIGINS` to the exact origin used by the Lovable frontend when you begin that work. Use comma-separated origins if needed.
+
+## Configuration
+
+The app reads `DB_URL`, `DB_USERNAME`, `DB_PASSWORD`, `PORT`, and `APP_CORS_ALLOWED_ORIGINS` from `.env` or the environment. `.env` is ignored by Git. The values in `.env.example` are placeholders; never commit a real credential.
+
+## API conventions
+
+- Business endpoints use `/api/v1/...`.
+- JSON request and response bodies use camelCase.
+- Timestamps use UTC.
+- Input validation belongs at API boundaries; persistence entities are not API response types.
+- Health and basic service information are exposed through Actuator; detailed health data is hidden.
+
+See [docs/architecture.md](docs/architecture.md), [docs/api.md](docs/api.md), and [docs/roadmap.md](docs/roadmap.md).
