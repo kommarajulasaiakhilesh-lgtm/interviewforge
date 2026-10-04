@@ -29,6 +29,9 @@
 - Phase 6: company and role catalogs, skill/topic relevance mappings, curated preparation sets, admin publishing, student-safe reads, migration, and API documentation. Completed in this phase delivery.
 - Phase 7: authenticated role readiness assessments with explainable weighted scores, sample coverage, and a prioritized rule-based study plan. Completed in this phase delivery.
 
-## Next phase
+## Current status
 
-- Phase 8: mock interview sessions, answer capture, and skill-area results.
+- Phases 1–7 are complete and pushed to `main` through commit `2d6ab09`.
+- Remaining phases are deferred until the user asks to resume. Do not start Phase 8 or later work yet.
+- Next when resumed: Phase 8, mock interview sessions, answer capture, and skill-area results.
+- Frontend remains planned for Lovable after backend phases are complete. Voice interview assistant remains a later feature discussion.
