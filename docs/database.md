@@ -9,3 +9,5 @@ Phase 3 adds `topics`, `question_tags`, `questions`, and `question_tag_assignmen
 Phase 4 adds `practice_sessions` and `practice_session_items`. Session items snapshot the prompt, options, and key at start so later question edits do not alter reviews. Items store submitted answers and grading timestamps. MCQ sessions store a percentage score; TEXT sessions remain unscored.
 
 Phase 5 adds a `topic_id` snapshot to practice items. The migration backfills existing attempt items from their linked question, then requires the topic reference. New sessions persist the question's topic at the time of session creation so subsequent question retagging does not move historical accuracy between topics.
+
+Phase 6 adds `companies`, `company_roles`, `skills`, `role_skills`, `skill_topics`, `preparation_sets`, and `preparation_set_questions`. Link weights are integers from 1 to 5. Catalogs and sets are deactivated/archived rather than hard-deleted; curated set questions reference the existing question bank and are exposed only while published.

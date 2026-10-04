@@ -130,3 +130,33 @@ All progress endpoints require a bearer token and report only the authenticated 
 - `GET /api/v1/progress/attempts?page=0&size=20` — paginated personal session history, newest first.
 
 Topic ratings use at least five answered MCQs: `STRONG` is 80% or above; `DEVELOPING` is 60% to below 80%; `NEEDS_WORK` is below 60%. Topics with fewer attempts are `NOT_ENOUGH_DATA`. Text answers do not affect accuracy because they are not automatically graded. Existing attempt topic IDs are backfilled from their linked question during the Phase 5 migration; new attempts snapshot the topic when they start.
+
+## Company preparation (Phase 6)
+
+All routes require a bearer token. Public-facing catalog reads are authenticated; all `/api/v1/admin/...` routes require `ADMIN`.
+
+### Student reads
+
+- `GET /api/v1/companies` — active companies.
+- `GET /api/v1/companies/{companyId}/roles` — active roles for an active company.
+- `GET /api/v1/roles/{roleId}` — active role details with its mapped skills and each skill's active related topics.
+- `GET /api/v1/preparation-sets?roleId=<uuid>` — published sets for an active role.
+- `GET /api/v1/preparation-sets/{setId}` — set details and currently published questions in curated order. Student question objects omit answer keys and explanations.
+
+### Admin catalogs and mappings
+
+- `GET/POST /api/v1/admin/companies`; `PUT /api/v1/admin/companies/{id}`
+- `GET/POST /api/v1/admin/roles`; `PUT /api/v1/admin/roles/{id}`; `GET /api/v1/admin/roles/{id}`
+- `GET/POST /api/v1/admin/skills`; `PUT /api/v1/admin/skills/{id}`
+- `PUT /api/v1/admin/roles/{id}/skills` with `{ "mappings": [{ "skillId": "<uuid>", "importance": 4 }] }` replaces the role's skill links. Send an empty list to clear them.
+- `GET/PUT /api/v1/admin/skills/{id}/topics` with `{ "mappings": [{ "topicId": "<uuid>", "relevance": 3 }] }` reads/replaces a skill's topic links. Link weights must be 1–5.
+
+Catalog create/update bodies use `{ "name": "Acme", "slug": "acme", "description": "...", "active": true }`. Slugs are optional and derived from the name. On update, omitting `active` preserves its current value; setting it false hides the catalog entry from student reads while retaining mappings.
+
+### Curated sets
+
+- `GET /api/v1/admin/preparation-sets` and `GET /api/v1/admin/preparation-sets/{id}` include drafts/archived entries for management.
+- `POST /api/v1/admin/preparation-sets` and `PUT /api/v1/admin/preparation-sets/{id}` accept `{ "roleId": "<uuid>", "title": "Backend interview", "description": "...", "published": false, "questionIds": ["<published-question-uuid>"] }`. Updates replace the ordered question list; the list must contain 1–50 distinct published questions.
+- `DELETE /api/v1/admin/preparation-sets/{id}` archives the set.
+
+Only active companies/roles and published, non-archived sets are visible to users. Sets never expose question answer keys. Missing resources return `404`, duplicate names/slugs return `409`, and invalid mappings or question lists return `400`.

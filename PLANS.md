@@ -59,3 +59,11 @@ Defer AI assistance, leaderboards, and arbitrary submitted-code execution until 
 - Topic ratings have explainable thresholds and require a minimum sample size.
 - Users can page through their own attempt summaries; no user's metrics can include another user's attempts.
 - Free-text attempts are excluded from MCQ accuracy until manual grading exists.
+
+## Phase 6 acceptance checklist
+
+- Admins can manage companies, company roles, and skills with reversible deactivation.
+- Admins can replace role-to-skill and skill-to-topic mappings with validated 1–5 weights.
+- Admins can curate, publish, update, and archive role preparation sets using published questions.
+- Authenticated users can browse active companies/roles and published sets with student-safe question responses.
+- API and data model are documented for later frontend integration.

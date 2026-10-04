@@ -56,4 +56,8 @@ Authenticated users can create practice sessions, submit answers, review feedbac
 
 Authenticated users can view overall MCQ accuracy, per-topic performance, strengths and areas to improve, and paginated attempt summaries. Topic ratings use transparent score bands and require five graded answers. See [docs/api.md](docs/api.md).
 
+## Company preparation API (Phase 6)
+
+The API models companies, company roles, required skills and topic links, and curated role-based question sets. Admins manage and publish catalogs; authenticated users browse active, published preparation data. See [docs/api.md](docs/api.md).
+
 See [docs/architecture.md](docs/architecture.md), [docs/api.md](docs/api.md), and [docs/roadmap.md](docs/roadmap.md).
