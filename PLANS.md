@@ -42,3 +42,12 @@ Defer AI assistance, leaderboards, and arbitrary submitted-code execution until 
 - Authenticated users can browse only published questions under active topics with topic, tag, difficulty, search, and pagination filters.
 - Student-facing question responses never include the answer key or explanation.
 - API and schema changes are documented for Lovable integration.
+
+## Phase 4 acceptance checklist
+
+- A user can start a 1–20 question session with optional topic and difficulty filters.
+- Sessions snapshot published prompts and answer keys so later edits do not change history.
+- Users can submit one answer per session question; MCQs are auto-graded and TEXT answers are saved without auto-grading.
+- Answer feedback reveals the answer and explanation only after submission; sessions and history are owner-only.
+- Completed MCQ sessions persist a score and all sessions appear in the user's paginated history.
+- API and schema changes are documented for Lovable integration.

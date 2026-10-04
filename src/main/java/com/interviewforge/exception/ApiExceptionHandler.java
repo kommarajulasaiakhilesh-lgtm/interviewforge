@@ -4,6 +4,7 @@ import com.interviewforge.auth.EmailAlreadyRegisteredException;
 import com.interviewforge.auth.InvalidCredentialsException;
 import com.interviewforge.auth.PasswordTooLongException;
 import com.interviewforge.questionbank.ResourceNotFoundException;
+import com.interviewforge.practice.InsufficientQuestionsException;
 import jakarta.servlet.http.HttpServletRequest;
 import java.net.URI;
 import java.util.stream.Collectors;
@@ -54,6 +55,11 @@ public class ApiExceptionHandler {
     @ExceptionHandler(IllegalArgumentException.class)
     ProblemDetail handleInvalidRequest(IllegalArgumentException exception, HttpServletRequest request) {
         return problem(HttpStatus.BAD_REQUEST, "Invalid request", exception.getMessage(), request);
+    }
+
+    @ExceptionHandler(InsufficientQuestionsException.class)
+    ProblemDetail handleInsufficientQuestions(InsufficientQuestionsException exception, HttpServletRequest request) {
+        return problem(HttpStatus.UNPROCESSABLE_ENTITY, "Not enough matching questions", exception.getMessage(), request);
     }
 
     private ProblemDetail problem(HttpStatus status, String title, String detail, HttpServletRequest request) {

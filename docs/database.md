@@ -5,3 +5,5 @@ PostgreSQL is the primary database. Flyway SQL migrations under `src/main/resour
 Phase 1 added no domain tables. Phase 2 adds `user_accounts`, `user_profiles`, and `auth_sessions`. Session tokens are stored as SHA-256 hashes. Accounts and their profiles/sessions use UUID keys and cascading foreign keys for account-owned data.
 
 Phase 3 adds `topics`, `question_tags`, `questions`, and `question_tag_assignments`. Catalog entries are deactivated instead of deleted so existing question references remain valid. Question deletion is archival. MCQ choices are JSONB and the correct option is an index constrained to the stored choices; student responses omit the answer key and explanation.
+
+Phase 4 adds `practice_sessions` and `practice_session_items`. Session items snapshot the prompt, options, and key at start so later question edits do not alter reviews. Items store submitted answers and grading timestamps. MCQ sessions store a percentage score; TEXT sessions remain unscored.

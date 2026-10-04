@@ -48,4 +48,8 @@ Send authenticated requests with `Authorization: Bearer <accessToken>`. New acco
 
 Authenticated users can browse published questions using topic, tag, difficulty, search, and pagination filters. Admin endpoints manage topics, tags, and questions; question answers and explanations are returned only by admin endpoints. See [docs/api.md](docs/api.md).
 
+## Practice API (Phase 4)
+
+Authenticated users can create practice sessions, submit answers, review feedback, and browse their own history. MCQs are auto-scored; TEXT answers are saved for review without automatic grading. See [docs/api.md](docs/api.md).
+
 See [docs/architecture.md](docs/architecture.md), [docs/api.md](docs/api.md), and [docs/roadmap.md](docs/roadmap.md).

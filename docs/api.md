@@ -109,3 +109,14 @@ Example MCQ request:
 ```
 
 For `TEXT`, send no `options` and no `correctOptionIndex`; `answerText` may hold the expected answer. Question creation defaults to draft unless `published` is true. `PUT` replaces the question, including its tag list and publication state. Duplicate catalog names/slugs return `409`; missing IDs return `404`; invalid request data returns `400`.
+
+## Practice (Phase 4)
+
+All routes require a bearer token and return data for the authenticated user's sessions only.
+
+- `POST /api/v1/practice/sessions` — create a random session. Request: `{ "topicId": "<uuid>", "difficulty": "MEDIUM", "type": "MCQ", "questionCount": 10 }`. `topicId`, `difficulty`, and `type` are optional; type defaults to MCQ. Count is required from 1 to 20. If too few matching published questions exist, response is `422`.
+- `POST /api/v1/practice/sessions/{sessionId}/answers` — submit one answer for a question in the session. MCQ: `{ "questionId": "<uuid>", "selectedOptionIndex": 1 }`. TEXT: `{ "questionId": "<uuid>", "answerText": "My response" }`.
+- `GET /api/v1/practice/sessions/{sessionId}` — review prompts and submitted answers. Correct answers/explanations are hidden until that question is answered.
+- `GET /api/v1/practice/sessions?page=0&size=20` — paged personal history, newest first (size 1–100).
+
+Sessions complete when each question is answered once. MCQs are graded immediately; the answer response includes correctness, key, and explanation. `scorePercent` is available on completion and equals correct answers divided by session question count. TEXT sessions are stored for review but have no automatic score (`scorePercent` is null). Prompts and keys are snapshotted at session creation. Another user's/nonexistent session returns `404`; repeated submissions or submissions after completion return `400`.
