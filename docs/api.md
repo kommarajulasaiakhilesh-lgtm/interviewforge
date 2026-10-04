@@ -160,3 +160,14 @@ Catalog create/update bodies use `{ "name": "Acme", "slug": "acme", "description
 - `DELETE /api/v1/admin/preparation-sets/{id}` archives the set.
 
 Only active companies/roles and published, non-archived sets are visible to users. Sets never expose question answer keys. Missing resources return `404`, duplicate names/slugs return `409`, and invalid mappings or question lists return `400`.
+
+## Readiness and study planning (Phase 7)
+
+Both endpoints require a bearer token and use only the authenticated user's graded MCQ history. The role, company, skill, and topic must be active. An unknown or inactive role returns `404`.
+
+- `GET /api/v1/readiness/roles/{roleId}` — readiness score, weighted skill/topic breakdown, and data coverage.
+- `GET /api/v1/readiness/roles/{roleId}/study-plan?maxTasks=10` — prioritized practice recommendations; `maxTasks` defaults to 10 and must be 1–20.
+
+Each topic's accuracy is correct answers divided by answered MCQs (unattempted topics have a score of zero in aggregate calculations). A topic weight is `role skill importance × skill topic relevance`; both source weights are 1–5. Overall readiness is the weighted mean of topic accuracy percentages across active mappings. Each skill score is the relevance-weighted mean of its topic accuracies. `dataCoveragePercent` is the fraction of total topic weight with at least five answers; five answers are required for `reliableSample: true`. With no active mappings, readiness is `null` and coverage is zero.
+
+The study plan includes topics with fewer than five attempts or below 80% accuracy. Each task recommends five MCQs and 30 minutes of practice, and includes reasons, current accuracy/count, and a priority (`topic weight × (100 − accuracy)`, rounded to the nearest integer). Higher priority is listed first, then topic name. Topics already at 80% or better with at least five attempts are omitted. Text answers are not counted because they are not automatically graded.

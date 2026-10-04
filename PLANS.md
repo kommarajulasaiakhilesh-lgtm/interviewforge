@@ -67,3 +67,11 @@ Defer AI assistance, leaderboards, and arbitrary submitted-code execution until 
 - Admins can curate, publish, update, and archive role preparation sets using published questions.
 - Authenticated users can browse active companies/roles and published sets with student-safe question responses.
 - API and data model are documented for later frontend integration.
+
+## Phase 7 acceptance checklist
+
+- Authenticated users can calculate readiness for an active role using only their own graded MCQ history.
+- Readiness combines active role-skill importance and skill-topic relevance weights; unattempted topics score zero and the response exposes data coverage.
+- Per-skill and per-topic results show their weights, answer counts, accuracy, and sample reliability.
+- Users receive a prioritized rule-based plan for unattempted, under-sampled, or below-target topics with reasons and estimated practice effort.
+- API formulas, thresholds, and response fields are documented; no new persistence is needed.

@@ -11,5 +11,5 @@ public class SkillTopicMapping {
     @Column(nullable=false) private int relevance;
     protected SkillTopicMapping() { }
     public SkillTopicMapping(UUID skillId,UUID topicId,int relevance){id=UUID.randomUUID();this.skillId=skillId;this.topicId=topicId;this.relevance=relevance;}
-    public UUID getTopicId(){return topicId;} public int getRelevance(){return relevance;}
+    public UUID getSkillId(){return skillId;} public UUID getTopicId(){return topicId;} public int getRelevance(){return relevance;}
 }

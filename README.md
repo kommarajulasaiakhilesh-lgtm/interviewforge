@@ -60,4 +60,8 @@ Authenticated users can view overall MCQ accuracy, per-topic performance, streng
 
 The API models companies, company roles, required skills and topic links, and curated role-based question sets. Admins manage and publish catalogs; authenticated users browse active, published preparation data. See [docs/api.md](docs/api.md).
 
+## Readiness and study planning API (Phase 7)
+
+Authenticated users can calculate a transparent readiness score for an active job role and receive a prioritized practice plan based on their own MCQ results. See [docs/api.md](docs/api.md) for the weighting formula and thresholds.
+
 See [docs/architecture.md](docs/architecture.md), [docs/api.md](docs/api.md), and [docs/roadmap.md](docs/roadmap.md).

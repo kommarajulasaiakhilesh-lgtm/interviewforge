@@ -11,5 +11,5 @@ public class RoleSkillMapping {
     @Column(nullable=false) private int importance;
     protected RoleSkillMapping() { }
     public RoleSkillMapping(UUID roleId,UUID skillId,int importance){id=UUID.randomUUID();this.roleId=roleId;this.skillId=skillId;this.importance=importance;}
-    public UUID getSkillId(){return skillId;} public int getImportance(){return importance;}
+    public UUID getRoleId(){return roleId;} public UUID getSkillId(){return skillId;} public int getImportance(){return importance;}
 }
