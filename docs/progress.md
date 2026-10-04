@@ -23,7 +23,8 @@
 
 - Phase 1: backend foundation, PostgreSQL configuration, Flyway, health endpoint, CORS, and API documentation. Commit `a4fb93e`.
 - Phase 2: student registration, login/logout, opaque bearer sessions, profile management, and authorization. Commit `33bd270`.
+- Phase 3: topic/tag catalog, searchable question bank, admin management, student-safe reads, migration, and integration docs. Commit `fb37c40`, pushed to `main`.
 
-## Current phase
+## Next phase
 
-- Phase 3: topic/tag catalog and searchable question bank with admin management and student-safe reads. Implementation and API/schema documentation are complete; the phase commit and push finish this delivery.
+- Phase 4: practice sessions, answer submission, scoring, and history.
