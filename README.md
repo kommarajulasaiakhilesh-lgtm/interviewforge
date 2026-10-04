@@ -34,4 +34,14 @@ The app reads `DB_URL`, `DB_USERNAME`, `DB_PASSWORD`, `PORT`, and `APP_CORS_ALLO
 - Input validation belongs at API boundaries; persistence entities are not API response types.
 - Health and basic service information are exposed through Actuator; detailed health data is hidden.
 
+## Accounts API (Phase 2)
+
+- `POST /api/v1/auth/register` — create a student account and return a bearer token.
+- `POST /api/v1/auth/login` — authenticate and issue a bearer token.
+- `POST /api/v1/auth/logout` — revoke the current bearer token.
+- `GET /api/v1/users/me` — read the authenticated user's profile.
+- `PATCH /api/v1/users/me` — update the authenticated user's display name.
+
+Send authenticated requests with `Authorization: Bearer <accessToken>`. New accounts are always `STUDENT`; assigning `ADMIN` requires a trusted administrative operation and is not available through public registration. See [docs/security.md](docs/security.md) and [docs/api.md](docs/api.md) for details.
+
 See [docs/architecture.md](docs/architecture.md), [docs/api.md](docs/api.md), and [docs/roadmap.md](docs/roadmap.md).
