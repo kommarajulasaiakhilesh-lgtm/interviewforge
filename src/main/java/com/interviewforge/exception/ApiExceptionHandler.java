@@ -3,6 +3,7 @@ package com.interviewforge.exception;
 import com.interviewforge.auth.EmailAlreadyRegisteredException;
 import com.interviewforge.auth.InvalidCredentialsException;
 import com.interviewforge.auth.PasswordTooLongException;
+import com.interviewforge.questionbank.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import java.net.URI;
 import java.util.stream.Collectors;
@@ -42,7 +43,17 @@ public class ApiExceptionHandler {
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     ProblemDetail handleDataConflict(DataIntegrityViolationException exception, HttpServletRequest request) {
-        return problem(HttpStatus.CONFLICT, "Conflict", "The request conflicts with existing account data.", request);
+        return problem(HttpStatus.CONFLICT, "Conflict", "The request conflicts with existing data.", request);
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    ProblemDetail handleNotFound(ResourceNotFoundException exception, HttpServletRequest request) {
+        return problem(HttpStatus.NOT_FOUND, "Not found", exception.getMessage(), request);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    ProblemDetail handleInvalidRequest(IllegalArgumentException exception, HttpServletRequest request) {
+        return problem(HttpStatus.BAD_REQUEST, "Invalid request", exception.getMessage(), request);
     }
 
     private ProblemDetail problem(HttpStatus status, String title, String detail, HttpServletRequest request) {

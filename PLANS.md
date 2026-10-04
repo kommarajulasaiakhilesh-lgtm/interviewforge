@@ -17,7 +17,7 @@ Defer AI assistance, leaderboards, and arbitrary submitted-code execution until 
 ## Phase 1 acceptance checklist
 
 - Maven project uses the agreed Java/Spring stack.
-- Local PostgreSQL can be started with Docker Compose and configured through environment variables.
+- Local PostgreSQL is configured through environment variables (Docker is not required).
 - Flyway owns schema changes; Hibernate validates rather than creates schema.
 - Health endpoint is exposed with details hidden.
 - CORS is configurable for the separate Lovable UI.
@@ -33,3 +33,12 @@ Defer AI assistance, leaderboards, and arbitrary submitted-code execution until 
 - ADMIN is represented as a role and is never self-selected during public registration.
 - Authentication and validation errors avoid exposing credentials or internal details.
 - Document request/response shapes for the later Lovable integration.
+
+## Phase 3 acceptance checklist
+
+- Admins can create and update topics and tags, and deactivate them without breaking existing references.
+- Admins can create, view, update, publish, unpublish, and archive questions.
+- Question types are validated and MCQ options/correct answers are persisted with database constraints.
+- Authenticated users can browse only published questions under active topics with topic, tag, difficulty, search, and pagination filters.
+- Student-facing question responses never include the answer key or explanation.
+- API and schema changes are documented for Lovable integration.
