@@ -120,3 +120,13 @@ All routes require a bearer token and return data for the authenticated user's s
 - `GET /api/v1/practice/sessions?page=0&size=20` — paged personal history, newest first (size 1–100).
 
 Sessions complete when each question is answered once. MCQs are graded immediately; the answer response includes correctness, key, and explanation. `scorePercent` is available on completion and equals correct answers divided by session question count. TEXT sessions are stored for review but have no automatic score (`scorePercent` is null). Prompts and keys are snapshotted at session creation. Another user's/nonexistent session returns `404`; repeated submissions or submissions after completion return `400`.
+
+## Progress (Phase 5)
+
+All progress endpoints require a bearer token and report only the authenticated user's data.
+
+- `GET /api/v1/progress/overview` — total completed and in-progress sessions, MCQ questions answered/correct, overall accuracy, and the five most recent attempts. Accuracy is correct MCQ answers divided by answered MCQ questions; it is `null` before any MCQ answer.
+- `GET /api/v1/progress/topics` — answered/correct MCQ counts, accuracy, most recent answer time, and a topic rating for each topic with graded answers.
+- `GET /api/v1/progress/attempts?page=0&size=20` — paginated personal session history, newest first.
+
+Topic ratings use at least five answered MCQs: `STRONG` is 80% or above; `DEVELOPING` is 60% to below 80%; `NEEDS_WORK` is below 60%. Topics with fewer attempts are `NOT_ENOUGH_DATA`. Text answers do not affect accuracy because they are not automatically graded. Existing attempt topic IDs are backfilled from their linked question during the Phase 5 migration; new attempts snapshot the topic when they start.

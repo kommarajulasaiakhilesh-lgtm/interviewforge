@@ -52,4 +52,8 @@ Authenticated users can browse published questions using topic, tag, difficulty,
 
 Authenticated users can create practice sessions, submit answers, review feedback, and browse their own history. MCQs are auto-scored; TEXT answers are saved for review without automatic grading. See [docs/api.md](docs/api.md).
 
+## Progress API (Phase 5)
+
+Authenticated users can view overall MCQ accuracy, per-topic performance, strengths and areas to improve, and paginated attempt summaries. Topic ratings use transparent score bands and require five graded answers. See [docs/api.md](docs/api.md).
+
 See [docs/architecture.md](docs/architecture.md), [docs/api.md](docs/api.md), and [docs/roadmap.md](docs/roadmap.md).

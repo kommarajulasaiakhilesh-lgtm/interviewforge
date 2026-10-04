@@ -14,6 +14,7 @@ public class PracticeSessionItem {
     @Id private UUID id;
     @Column(name = "session_id", nullable = false) private UUID sessionId;
     @Column(name = "question_id", nullable = false) private UUID questionId;
+    @Column(name = "topic_id", nullable = false) private UUID topicId;
     @Column(nullable = false) private int position;
     @Column(nullable = false, length = 200) private String title;
     @Column(name = "question_text", nullable = false, columnDefinition = "text") private String questionText;
@@ -28,9 +29,9 @@ public class PracticeSessionItem {
     @Column(name = "is_correct") private Boolean correct;
     @Column(name = "answered_at") private Instant answeredAt;
     protected PracticeSessionItem() { }
-    public PracticeSessionItem(UUID sessionId, UUID questionId, int position, String title, String questionText,
+    public PracticeSessionItem(UUID sessionId, UUID questionId, UUID topicId, int position, String title, String questionText,
             Difficulty difficulty, QuestionType type, String optionsJson, Integer correctOptionIndex, String answerText, String explanation) {
-        id = UUID.randomUUID(); this.sessionId = sessionId; this.questionId = questionId; this.position = position;
+        id = UUID.randomUUID(); this.sessionId = sessionId; this.questionId = questionId; this.topicId = topicId; this.position = position;
         this.title = title; this.questionText = questionText; this.difficulty = difficulty; this.type = type;
         this.optionsJson = optionsJson; this.correctOptionIndex = correctOptionIndex; this.answerText = answerText; this.explanation = explanation;
     }
@@ -38,6 +39,7 @@ public class PracticeSessionItem {
         selectedOptionIndex = optionIndex; submittedAnswerText = text; this.correct = correct; answeredAt = Instant.now();
     }
     public UUID getQuestionId() { return questionId; }
+    public UUID getTopicId() { return topicId; }
     public int getPosition() { return position; }
     public String getTitle() { return title; }
     public String getQuestionText() { return questionText; }

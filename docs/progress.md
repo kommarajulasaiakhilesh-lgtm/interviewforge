@@ -25,7 +25,8 @@
 - Phase 2: student registration, login/logout, opaque bearer sessions, profile management, and authorization. Commit `33bd270`.
 - Phase 3: topic/tag catalog, searchable question bank, admin management, student-safe reads, migration, and integration docs. Commit `fb37c40`, pushed to `main`.
 - Phase 4: practice session creation, answer submission, MCQ scoring, TEXT response capture, answer review, owner-only history, migration, and API docs. Completed in this phase delivery.
+- Phase 5: overall accuracy, per-topic ratings with minimum-sample thresholds, and paginated attempt summaries. Completed and documented in this phase delivery.
 
 ## Next phase
 
-- Phase 5: progress analytics, topic strengths and weaknesses, and attempt history summaries.
+- Phase 6: company preparation, roles, skills, topic mappings, and curated sets.

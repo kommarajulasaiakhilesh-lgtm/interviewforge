@@ -51,3 +51,11 @@ Defer AI assistance, leaderboards, and arbitrary submitted-code execution until 
 - Answer feedback reveals the answer and explanation only after submission; sessions and history are owner-only.
 - Completed MCQ sessions persist a score and all sessions appear in the user's paginated history.
 - API and schema changes are documented for Lovable integration.
+
+## Phase 5 acceptance checklist
+
+- Authenticated users can read their own overall completed/in-progress session counts and MCQ accuracy.
+- Per-topic answered/correct totals and accuracy use stable topic attribution from practice attempts.
+- Topic ratings have explainable thresholds and require a minimum sample size.
+- Users can page through their own attempt summaries; no user's metrics can include another user's attempts.
+- Free-text attempts are excluded from MCQ accuracy until manual grading exists.

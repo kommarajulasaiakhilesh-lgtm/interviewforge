@@ -40,7 +40,7 @@ public class PracticeService {
         int position = 1;
         for (UUID id : ids) {
             Question q = byId.get(id);
-            items.save(new PracticeSessionItem(session.getId(), id, position++, q.getTitle(), q.getQuestionText(),
+            items.save(new PracticeSessionItem(session.getId(), id, q.getTopic().getId(), position++, q.getTitle(), q.getQuestionText(),
                     q.getDifficulty(), q.getType(), q.getOptionsJson(), q.getCorrectOptionIndex(), q.getAnswerText(), q.getExplanation()));
         }
         return new CreateSessionResponse(summary(session), items.findAllBySessionIdOrderByPosition(session.getId()).stream().map(this::prompt).toList());

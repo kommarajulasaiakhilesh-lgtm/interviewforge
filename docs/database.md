@@ -7,3 +7,5 @@ Phase 1 added no domain tables. Phase 2 adds `user_accounts`, `user_profiles`, a
 Phase 3 adds `topics`, `question_tags`, `questions`, and `question_tag_assignments`. Catalog entries are deactivated instead of deleted so existing question references remain valid. Question deletion is archival. MCQ choices are JSONB and the correct option is an index constrained to the stored choices; student responses omit the answer key and explanation.
 
 Phase 4 adds `practice_sessions` and `practice_session_items`. Session items snapshot the prompt, options, and key at start so later question edits do not alter reviews. Items store submitted answers and grading timestamps. MCQ sessions store a percentage score; TEXT sessions remain unscored.
+
+Phase 5 adds a `topic_id` snapshot to practice items. The migration backfills existing attempt items from their linked question, then requires the topic reference. New sessions persist the question's topic at the time of session creation so subsequent question retagging does not move historical accuracy between topics.
