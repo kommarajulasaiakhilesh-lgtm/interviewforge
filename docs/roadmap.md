@@ -8,6 +8,6 @@
 6. Companies, roles, and preparation sets
 7. Readiness scoring and study plans
 8. Mock interviews
-9. Security hardening, deployment, and monitoring
+9. Production polish, security review, deployment, and monitoring (provider-neutral JAR deployment guidance)
 
-AI features, achievements/leaderboards, and isolated coding submissions are later extensions, not part of the initial core release.
+The Java backend's nine planned phases are implemented. The web application is a separate planned Lovable deliverable. AI voice assistance, achievements/leaderboards, and isolated coding submissions remain later extensions.

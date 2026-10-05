@@ -26,6 +26,10 @@ Set `APP_CORS_ALLOWED_ORIGINS` to the exact origin used by the Lovable frontend 
 
 The app reads `DB_URL`, `DB_USERNAME`, `DB_PASSWORD`, `PORT`, and `APP_CORS_ALLOWED_ORIGINS` from `.env` or the environment. `.env` is ignored by Git. The values in `.env.example` are placeholders; never commit a real credential.
 
+## Deployment
+
+The API can run as a Java JAR with managed PostgreSQL; Docker is not required. Use the `prod` Spring profile and supply database credentials and exact frontend CORS origins through the host's secret manager. See [docs/deployment.md](docs/deployment.md) for build, health-probe, backup, and operational guidance. CI packages the backend but does not deploy it.
+
 ## API conventions
 
 - Business endpoints use `/api/v1/...`.
@@ -68,4 +72,4 @@ Authenticated users can calculate a transparent readiness score for an active jo
 
 Authenticated users can start a role-specific written mock interview, save their answers and self-ratings, then review progress by skill area. Answers are captured for later review and are not automatically graded. See [docs/api.md](docs/api.md).
 
-See [docs/architecture.md](docs/architecture.md), [docs/api.md](docs/api.md), and [docs/roadmap.md](docs/roadmap.md).
+See [docs/architecture.md](docs/architecture.md), [docs/api.md](docs/api.md), [docs/security.md](docs/security.md), [docs/deployment.md](docs/deployment.md), and [docs/roadmap.md](docs/roadmap.md).

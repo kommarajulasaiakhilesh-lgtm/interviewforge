@@ -83,3 +83,11 @@ Defer AI assistance, leaderboards, and arbitrary submitted-code execution until 
 - Users submit one written answer and a 1–5 self-rating per prompt; sessions complete after all answers are submitted.
 - Session detail/history report completion and per-skill weighted self-ratings without claiming automated answer grading.
 - Flyway migration and API contract are documented for the later web frontend.
+
+## Phase 9 acceptance checklist
+
+- Runtime exposes safe liveness/readiness health probes and build metadata without secrets or component details.
+- Production profile requires explicit database and frontend-origin configuration; proxy HTTPS headers and graceful shutdown are configured.
+- Security response headers and route access rules are reviewed and documented, including operational controls still required at the hosting edge.
+- A CI workflow packages the Java 21 backend on pushes and pull requests.
+- Deployment and operational guidance covers managed PostgreSQL, migrations, HTTPS, backups, monitoring, and Lovable CORS configuration without requiring Docker.

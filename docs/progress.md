@@ -29,9 +29,10 @@
 - Phase 6: company and role catalogs, skill/topic relevance mappings, curated preparation sets, admin publishing, student-safe reads, migration, and API documentation. Completed in this phase delivery.
 - Phase 7: authenticated role readiness assessments with explainable weighted scores, sample coverage, and a prioritized rule-based study plan. Completed in this phase delivery.
 - Phase 8: role-specific mock interview sessions, answer capture, self-ratings, and per-skill completion/results. Completed in this phase delivery.
+- Phase 9: security headers and route review, sanitized health probes/build info, production configuration, Java JAR deployment guidance, and GitHub Actions packaging workflow. Completed in this phase delivery.
 
 ## Current status
 
-- Phases 1–8 are implemented; Phase 8 compile verification succeeded and its changes are ready to commit and push.
-- Next planned work: build and connect the web application in Lovable; decide on Phase 9 after that work.
+- Phases 1–9 are implemented; the web application is the next planned deliverable in Lovable.
+- Phase 9 does not provision cloud resources or perform a deployment; choose a host and complete the listed launch controls when deployment is planned.
 - Frontend remains planned for Lovable after backend phases are complete. Voice interview assistant remains a later feature discussion.

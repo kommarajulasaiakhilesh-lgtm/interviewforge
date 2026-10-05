@@ -20,9 +20,13 @@ spring:
     locations: classpath:db/migration
   jackson:
     time-zone: UTC
+  lifecycle:
+    timeout-per-shutdown-phase: 20s
 
 server:
   port: ${PORT:8080}
+  shutdown: graceful
+  forward-headers-strategy: framework
   error:
     include-message: never
     include-stacktrace: never
@@ -39,6 +43,15 @@ management:
   endpoint:
     health:
       show-details: never
+      probes:
+        enabled: true
+      group:
+        liveness:
+          include: livenessState
+        readiness:
+          include: readinessState,db
   info:
     env:
       enabled: false
+    build:
+      enabled: true
