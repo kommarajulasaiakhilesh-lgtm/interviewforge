@@ -35,4 +35,7 @@
 
 - Phases 1–9 are implemented; the web application is the next planned deliverable in Lovable.
 - Phase 9 does not provision cloud resources or perform a deployment; choose a host and complete the listed launch controls when deployment is planned.
-- Frontend remains planned for Lovable after backend phases are complete. Voice interview assistant remains a later feature discussion.
+- The local backend was started successfully, PostgreSQL connected, and Flyway migrated the local database through schema version 7. `/actuator/health` and `/actuator/health/readiness` both returned `UP`.
+- The local backend process was stopped at the user's request. Restart it later with `java -jar target/interviewforge-api-0.1.0-SNAPSHOT.jar` from the repository directory, or `mvn spring-boot:run` with Maven's local repository set to `C:/Users/vysh1/.m2/repository`.
+- Next time: the user plans to build the web frontend in Lovable and integrate it with this backend. Do not start frontend work until the user returns and asks.
+- Voice interview assistant remains a later feature discussion.
