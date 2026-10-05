@@ -64,4 +64,8 @@ The API models companies, company roles, required skills and topic links, and cu
 
 Authenticated users can calculate a transparent readiness score for an active job role and receive a prioritized practice plan based on their own MCQ results. See [docs/api.md](docs/api.md) for the weighting formula and thresholds.
 
+## Mock interview API (Phase 8)
+
+Authenticated users can start a role-specific written mock interview, save their answers and self-ratings, then review progress by skill area. Answers are captured for later review and are not automatically graded. See [docs/api.md](docs/api.md).
+
 See [docs/architecture.md](docs/architecture.md), [docs/api.md](docs/api.md), and [docs/roadmap.md](docs/roadmap.md).

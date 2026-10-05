@@ -171,3 +171,14 @@ Both endpoints require a bearer token and use only the authenticated user's grad
 Each topic's accuracy is correct answers divided by answered MCQs (unattempted topics have a score of zero in aggregate calculations). A topic weight is `role skill importance × skill topic relevance`; both source weights are 1–5. Overall readiness is the weighted mean of topic accuracy percentages across active mappings. Each skill score is the relevance-weighted mean of its topic accuracies. `dataCoveragePercent` is the fraction of total topic weight with at least five answers; five answers are required for `reliableSample: true`. With no active mappings, readiness is `null` and coverage is zero.
 
 The study plan includes topics with fewer than five attempts or below 80% accuracy. Each task recommends five MCQs and 30 minutes of practice, and includes reasons, current accuracy/count, and a priority (`topic weight × (100 − accuracy)`, rounded to the nearest integer). Higher priority is listed first, then topic name. Topics already at 80% or better with at least five attempts are omitted. Text answers are not counted because they are not automatically graded.
+
+## Mock interviews (Phase 8)
+
+All routes require a bearer token and operate only on the authenticated user's interview sessions. Interviews use published `TEXT` questions from active topics mapped to an active role. The role and company must also be active. Questions are selected at random and their prompt and skill attribution are snapshotted into the session. If fewer questions are available than requested, the API returns `422`.
+
+- `POST /api/v1/mock-interviews` — start a session. Request: `{ "roleId": "<uuid>", "questionCount": 5 }`, with question count 1–20. The response contains the session and prompts (no expected answers).
+- `POST /api/v1/mock-interviews/{sessionId}/answers` — submit one answer: `{ "questionId": "<uuid>", "answerText": "...", "selfRating": 4 }`. Answer text is required (maximum 10,000 characters); self-rating is required from 1 to 5. A question can be answered only once.
+- `GET /api/v1/mock-interviews/{sessionId}` — retrieve owned prompts, submitted answers, status, and per-skill results.
+- `GET /api/v1/mock-interviews?page=0&size=20` — paginated personal history, newest first (size 1–100).
+
+A session completes when every question is answered. Skill results report answered count, completion percentage, and the weighted mean of the user's self-ratings (`role skill importance × topic relevance`). These self-ratings are reflection aids, not a score of answer quality. The current backend does not automatically grade free-text answers. Non-owned or missing sessions return `404`; duplicate answers and answers after completion return `400`.

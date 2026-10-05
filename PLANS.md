@@ -75,3 +75,11 @@ Defer AI assistance, leaderboards, and arbitrary submitted-code execution until 
 - Per-skill and per-topic results show their weights, answer counts, accuracy, and sample reliability.
 - Users receive a prioritized rule-based plan for unattempted, under-sampled, or below-target topics with reasons and estimated practice effort.
 - API formulas, thresholds, and response fields are documented; no new persistence is needed.
+
+## Phase 8 acceptance checklist
+
+- Authenticated users can start a role-specific mock interview with 1–20 published TEXT questions drawn from active mapped topics.
+- Prompts and role/skill attribution are snapshotted; questions and answers belong only to the session owner.
+- Users submit one written answer and a 1–5 self-rating per prompt; sessions complete after all answers are submitted.
+- Session detail/history report completion and per-skill weighted self-ratings without claiming automated answer grading.
+- Flyway migration and API contract are documented for the later web frontend.

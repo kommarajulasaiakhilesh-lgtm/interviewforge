@@ -11,3 +11,5 @@ Phase 4 adds `practice_sessions` and `practice_session_items`. Session items sna
 Phase 5 adds a `topic_id` snapshot to practice items. The migration backfills existing attempt items from their linked question, then requires the topic reference. New sessions persist the question's topic at the time of session creation so subsequent question retagging does not move historical accuracy between topics.
 
 Phase 6 adds `companies`, `company_roles`, `skills`, `role_skills`, `skill_topics`, `preparation_sets`, and `preparation_set_questions`. Link weights are integers from 1 to 5. Catalogs and sets are deactivated/archived rather than hard-deleted; curated set questions reference the existing question bank and are exposed only while published.
+
+Phase 8 adds `mock_interview_sessions` and `mock_interview_items`. Each session snapshots the selected role name; each item snapshots its prompt, topic/skill attribution, and mapping weights. Answer text and required 1–5 self-rating are saved once per question. Session ownership cascades on account deletion; referenced role, question, topic, and skill records are retained by foreign keys.
