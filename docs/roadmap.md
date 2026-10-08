@@ -9,5 +9,6 @@
 7. Readiness scoring and study plans
 8. Mock interviews
 9. Production polish, security review, deployment, and monitoring (provider-neutral JAR deployment guidance)
+10. Explainable learning loop: source provenance, option-level teaching, confidence calibration, spaced review, learner goals, and structured mock-interview rubrics
 
-The Java backend's nine planned phases are implemented. The web application is a separate planned Lovable deliverable. AI voice assistance, achievements/leaderboards, and isolated coding submissions remain later extensions.
+Phases 1–9 are complete. Phase 10 adds backend capabilities and contracts for the InterviewForge coaching experience. Wire the page interactions in the connected Lovable frontend against these endpoints. Voice AI remains deferred as previously agreed; achievements/leaderboards and isolated coding submissions are future extensions.

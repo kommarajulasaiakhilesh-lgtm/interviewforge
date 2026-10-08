@@ -23,15 +23,19 @@ public class MockInterviewItem {
     @Column(name = "submitted_answer_text", columnDefinition = "text") private String submittedAnswerText;
     @Column(name = "self_rating") private Integer selfRating;
     @Column(name = "answered_at") private Instant answeredAt;
+    @Column(name = "evaluation_criteria", columnDefinition = "text") private String evaluationCriteria;
+    @Column(name = "follow_up_prompt", columnDefinition = "text") private String followUpPrompt;
 
     protected MockInterviewItem() { }
 
     public MockInterviewItem(UUID sessionId, UUID questionId, UUID topicId, UUID skillId, String skillName,
-            int skillImportance, int topicRelevance, int position, String title, String questionText, Difficulty difficulty) {
+            int skillImportance, int topicRelevance, int position, String title, String questionText, Difficulty difficulty,
+            String evaluationCriteria, String followUpPrompt) {
         this.id = UUID.randomUUID(); this.sessionId = sessionId; this.questionId = questionId; this.topicId = topicId;
         this.skillId = skillId; this.skillName = skillName; this.skillImportance = skillImportance;
         this.topicRelevance = topicRelevance; this.position = position; this.title = title;
         this.questionText = questionText; this.difficulty = difficulty;
+        this.evaluationCriteria = evaluationCriteria; this.followUpPrompt = followUpPrompt;
     }
 
     public void submit(String answer, int rating) { submittedAnswerText = answer; selfRating = rating; answeredAt = Instant.now(); }
@@ -48,4 +52,6 @@ public class MockInterviewItem {
     public String getSubmittedAnswerText() { return submittedAnswerText; }
     public Integer getSelfRating() { return selfRating; }
     public Instant getAnsweredAt() { return answeredAt; }
+    public String getEvaluationCriteria() { return evaluationCriteria; }
+    public String getFollowUpPrompt() { return followUpPrompt; }
 }

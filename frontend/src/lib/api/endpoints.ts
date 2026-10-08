@@ -22,11 +22,19 @@ export const practiceApi = {
     api<T.PracticeAnswerResponse>(`/practice/sessions/${sessionId}/answers`, { method: "POST", body: b }),
   get: (sessionId: string) => api<T.PracticeSessionDetail>(`/practice/sessions/${sessionId}`),
   list: (page = 0, size = 20) => api<T.Page<T.PracticeSessionSummary>>("/practice/sessions", { query: { page, size } }),
+  reviewQueue: (limit = 20) => api<T.ReviewQueueItem[]>("/practice/review-queue", { query: { limit } }),
+  createReviewSession: (questionCount = 10) => api<T.CreatePracticeResponse>("/practice/review-queue/sessions", { method: "POST", query: { questionCount } }),
+};
+
+export const preparationGoalApi = {
+  get: () => api<T.PreparationGoal>("/users/me/preparation"),
+  update: (goal: T.PreparationGoal) => api<T.PreparationGoal>("/users/me/preparation", { method: "PATCH", body: goal }),
 };
 
 export const progressApi = {
   overview: () => api<T.ProgressOverview>("/progress/overview"),
   topics: () => api<T.TopicProgress>("/progress/topics"),
+  learningInsights: () => api<T.LearningInsights>("/progress/learning-insights"),
   attempts: (page = 0, size = 20) => api<T.Page<T.PracticeSessionSummary>>("/progress/attempts", { query: { page, size } }),
 };
 

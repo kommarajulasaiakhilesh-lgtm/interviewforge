@@ -13,6 +13,16 @@ import org.springframework.web.bind.annotation.*;
 public class PracticeController {
     private final PracticeService service;
     public PracticeController(PracticeService service) { this.service = service; }
+    @GetMapping("/review-queue")
+    public java.util.List<ReviewQueueItem> reviewQueue(@AuthenticationPrincipal AppPrincipal principal,
+            @RequestParam(defaultValue = "20") int limit) {
+        return service.reviewQueue(principal.userId(), limit);
+    }
+    @PostMapping("/review-queue/sessions")
+    public CreateSessionResponse reviewSession(@AuthenticationPrincipal AppPrincipal principal,
+            @RequestParam(defaultValue = "10") int questionCount) {
+        return service.createReviewSession(principal.userId(), questionCount);
+    }
     @PostMapping("/sessions")
     public CreateSessionResponse create(@AuthenticationPrincipal AppPrincipal principal, @Valid @RequestBody CreateSessionRequest request) {
         return service.create(principal.userId(), request);

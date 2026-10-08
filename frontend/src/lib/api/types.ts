@@ -65,6 +65,12 @@ export interface QuestionSummary {
   topic: Topic;
   tags: Tag[];
   createdAt: ISODate;
+  scenarioContext: string | null;
+  interviewStage: string | null;
+  sourceType: string | null;
+  sourceLabel: string | null;
+  sourceUrl: string | null;
+  sourceVerifiedAt: ISODate | null;
 }
 export interface QuestionFilters {
   topicId?: UUID | undefined;
@@ -90,6 +96,12 @@ export interface PracticePrompt {
   difficulty: Difficulty;
   type: QuestionType;
   options: string[] | null;
+  scenarioContext: string | null;
+  interviewStage: string | null;
+  sourceType: string | null;
+  sourceLabel: string | null;
+  sourceUrl: string | null;
+  sourceVerifiedAt: ISODate | null;
 }
 export interface PracticeSessionSummary {
   sessionId: UUID;
@@ -107,8 +119,8 @@ export interface CreatePracticeResponse {
   questions: PracticePrompt[];
 }
 export type SubmitPracticeAnswer =
-  | { questionId: UUID; selectedOptionIndex: number }
-  | { questionId: UUID; answerText: string };
+  | { questionId: UUID; selectedOptionIndex: number; confidenceRating?: number }
+  | { questionId: UUID; answerText: string; confidenceRating?: number };
 export interface PracticeAnswerResponse {
   sessionId: UUID;
   questionId: UUID;
@@ -121,6 +133,11 @@ export interface PracticeAnswerResponse {
   answeredCount: number;
   questionCount: number;
   scorePercent: number | null;
+  optionExplanations: string[];
+  theoryNotes: string | null;
+  workplaceExample: string | null;
+  misconceptionLabel: string | null;
+  confidenceRating: number | null;
 }
 export interface PracticeQuestionReview {
   questionId: UUID;
@@ -137,6 +154,17 @@ export interface PracticeQuestionReview {
   answerText: string | null;
   explanation: string | null;
   answeredAt: ISODate | null;
+  optionExplanations: string[];
+  theoryNotes: string | null;
+  workplaceExample: string | null;
+  misconceptionLabel: string | null;
+  scenarioContext: string | null;
+  interviewStage: string | null;
+  sourceType: string | null;
+  sourceLabel: string | null;
+  sourceUrl: string | null;
+  sourceVerifiedAt: ISODate | null;
+  confidenceRating: number | null;
 }
 export interface PracticeSessionDetail {
   session: PracticeSessionSummary;
@@ -164,6 +192,11 @@ export interface TopicPerformance {
 export interface TopicProgress {
   minimumAttemptsForRating: number;
   topics: TopicPerformance[];
+}
+export interface LearningInsights {
+  confidenceCalibration: { confidenceRating: number; answered: number; correct: number; accuracyPercent: number }[];
+  recurringMisconceptions: { label: string; incorrectAnswers: number; mostRecentAt: ISODate }[];
+  minimumAttemptsForInsight: number;
 }
 
 // Company preparation
@@ -299,6 +332,8 @@ export interface MockAnswerDetail extends MockPrompt {
   answerText: string | null;
   selfRating: number | null;
   answeredAt: ISODate | null;
+  evaluationCriteria: string | null;
+  followUpPrompt: string | null;
 }
 export interface MockSkillResult {
   skillId: UUID;
@@ -314,6 +349,27 @@ export interface MockSessionDetail {
   questions: MockAnswerDetail[];
   skillResults: MockSkillResult[];
   assessmentMethod: string;
+}
+
+export interface ReviewQueueItem {
+  questionId: UUID;
+  title: string;
+  questionText: string;
+  difficulty: Difficulty;
+  options: string[];
+  dueAt: ISODate;
+  intervalDays: number;
+  lastConfidence: number | null;
+  misconceptionLabel: string | null;
+  sourceType: string | null;
+  sourceLabel: string | null;
+  sourceUrl: string | null;
+}
+export interface PreparationGoal {
+  targetRoleId: UUID | null;
+  interviewDate: string | null;
+  weeklyStudyMinutes: number | null;
+  jobDescription: string | null;
 }
 
 // RFC 7807 problem+json error body

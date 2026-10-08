@@ -91,3 +91,13 @@ Defer AI assistance, leaderboards, and arbitrary submitted-code execution until 
 - Security response headers and route access rules are reviewed and documented, including operational controls still required at the hosting edge.
 - A CI workflow packages the Java 21 backend on pushes and pull requests.
 - Deployment and operational guidance covers managed PostgreSQL, migrations, HTTPS, backups, monitoring, and Lovable CORS configuration without requiring Docker.
+
+## Phase 10 acceptance checklist
+
+- Question authors can provide per-option explanations, theory, workplace examples, misconception labels, scenario context, interview stage, source provenance, and verification dates.
+- Student-facing prompts expose provenance/context while answer keys and teaching content remain hidden until answer submission.
+- Practice captures optional confidence, returns detailed learning feedback, and schedules missed or low-confidence MCQs for review.
+- Users can start sessions from due review items and inspect confidence calibration and recurring misconception insights.
+- Users can save their target role, interview date, weekly study time, and private job description; the existing readiness and study plan APIs support that target role.
+- Mock interview questions can include a curated evaluation rubric and follow-up prompt, revealed only after the answer; the API clearly states these are not automatic AI grading.
+- Flyway migrations, API contract, privacy behavior, and frontend integration types/endpoints are documented for Lovable.

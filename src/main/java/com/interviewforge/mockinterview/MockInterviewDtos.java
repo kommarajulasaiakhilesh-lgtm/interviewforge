@@ -24,7 +24,8 @@ public final class MockInterviewDtos {
     public record CreateResponse(SessionSummary session, List<QuestionPrompt> questions) { }
     public record AnswerResponse(SessionSummary session, UUID questionId, int selfRating) { }
     public record AnswerDetail(UUID questionId, int position, String skillName, String title, String questionText,
-            Difficulty difficulty, String answerText, Integer selfRating, Instant answeredAt) { }
+            Difficulty difficulty, String answerText, Integer selfRating, Instant answeredAt,
+            String evaluationCriteria, String followUpPrompt) { }
     public record SkillResult(UUID skillId, String skillName, int importance, int questionsAnswered,
             int questionCount, BigDecimal completionPercent, BigDecimal selfRatingAverage) { }
     public record SessionDetail(SessionSummary session, List<AnswerDetail> questions, List<SkillResult> skillResults,

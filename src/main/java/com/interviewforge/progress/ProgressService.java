@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,9 +23,10 @@ public class ProgressService {
     private static final int MINIMUM_ATTEMPTS_FOR_RATING = 5;
     private final ProgressRepository progress;
     private final PracticeSessionRepository sessions;
+    private final JdbcTemplate jdbc;
 
-    public ProgressService(ProgressRepository progress, PracticeSessionRepository sessions) {
-        this.progress = progress; this.sessions = sessions;
+    public ProgressService(ProgressRepository progress, PracticeSessionRepository sessions, JdbcTemplate jdbc) {
+        this.progress = progress; this.sessions = sessions; this.jdbc = jdbc;
     }
 
     public Overview overview(UUID userId) {
@@ -39,6 +41,28 @@ public class ProgressService {
     public TopicProgress topics(UUID userId) {
         List<TopicPerformance> result = progress.topics(userId).stream().map(this::topic).toList();
         return new TopicProgress(MINIMUM_ATTEMPTS_FOR_RATING, result);
+    }
+
+    public LearningInsights learningInsights(UUID userId) {
+        List<ConfidencePerformance> confidence = jdbc.query("""
+                SELECT i.confidence_rating, COUNT(*) AS answered,
+                       COUNT(*) FILTER (WHERE i.is_correct) AS correct,
+                       ROUND(100.0 * COUNT(*) FILTER (WHERE i.is_correct) / NULLIF(COUNT(*), 0), 2) AS accuracy
+                FROM practice_session_items i JOIN practice_sessions s ON s.id = i.session_id
+                WHERE s.user_id = ? AND i.type = 'MCQ' AND i.answered_at IS NOT NULL AND i.confidence_rating IS NOT NULL
+                GROUP BY i.confidence_rating ORDER BY i.confidence_rating
+                """, (rs, rowNum) -> new ConfidencePerformance(rs.getInt("confidence_rating"), rs.getLong("answered"),
+                rs.getLong("correct"), rs.getBigDecimal("accuracy")), userId);
+        List<MisconceptionPerformance> misconceptions = jdbc.query("""
+                SELECT i.misconception_label, COUNT(*) AS incorrect_answers, MAX(i.answered_at) AS most_recent_at
+                FROM practice_session_items i JOIN practice_sessions s ON s.id = i.session_id
+                WHERE s.user_id = ? AND i.type = 'MCQ' AND i.is_correct = false
+                  AND i.misconception_label IS NOT NULL AND i.misconception_label <> ''
+                GROUP BY i.misconception_label HAVING COUNT(*) >= 2
+                ORDER BY incorrect_answers DESC, most_recent_at DESC LIMIT 10
+                """, (rs, rowNum) -> new MisconceptionPerformance(rs.getString("misconception_label"),
+                rs.getLong("incorrect_answers"), rs.getTimestamp("most_recent_at").toInstant()), userId);
+        return new LearningInsights(confidence, misconceptions, 3);
     }
 
     public com.interviewforge.questionbank.QuestionBankDtos.PageResponse<SessionSummary> attempts(UUID userId, int page, int size) {

@@ -57,7 +57,8 @@ public class MockInterviewService {
         for (QuestionChoice choice : selected) {
             Question q = choice.question(); SkillTopic m = choice.mapping();
             items.save(new MockInterviewItem(session.getId(), q.getId(), m.topicId(), m.skillId(), m.skillName(),
-                    m.importance(), m.relevance(), position++, q.getTitle(), q.getQuestionText(), q.getDifficulty()));
+                    m.importance(), m.relevance(), position++, q.getTitle(), q.getQuestionText(), q.getDifficulty(),
+                    q.getEvaluationCriteria(), q.getFollowUpPrompt()));
         }
         return new CreateResponse(summary(session), items.findAllBySessionIdOrderByPosition(session.getId()).stream().map(this::prompt).toList());
     }
@@ -137,7 +138,8 @@ public class MockInterviewService {
     private QuestionPrompt prompt(MockInterviewItem i) { return new QuestionPrompt(i.getQuestionId(), i.getPosition(), i.getSkillName(), i.getTitle(), i.getQuestionText(), i.getDifficulty()); }
     private AnswerDetail answerDetail(MockInterviewItem i) {
         return new AnswerDetail(i.getQuestionId(), i.getPosition(), i.getSkillName(), i.getTitle(), i.getQuestionText(), i.getDifficulty(),
-                i.getSubmittedAnswerText(), i.getSelfRating(), i.getAnsweredAt());
+                i.getSubmittedAnswerText(), i.getSelfRating(), i.getAnsweredAt(), i.getAnsweredAt() == null ? null : i.getEvaluationCriteria(),
+                i.getAnsweredAt() == null ? null : i.getFollowUpPrompt());
     }
     private record SkillTopic(UUID skillId, String skillName, int importance, UUID topicId, int relevance, int weight) { }
     private record QuestionChoice(Question question, SkillTopic mapping) { }

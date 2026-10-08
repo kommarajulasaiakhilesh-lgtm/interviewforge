@@ -30,6 +30,7 @@
 - Phase 7: authenticated role readiness assessments with explainable weighted scores, sample coverage, and a prioritized rule-based study plan. Completed in this phase delivery.
 - Phase 8: role-specific mock interview sessions, answer capture, self-ratings, and per-skill completion/results. Completed in this phase delivery.
 - Phase 9: security headers and route review, sanitized health probes/build info, production configuration, Java JAR deployment guidance, and GitHub Actions packaging workflow. Completed in this phase delivery.
+- Phase 10: provenance-aware question content, per-option coaching, theory and workplace examples, misconception labels, interview scenarios and stages, confidence capture, spaced review, learning insights, learner goals, and mock-interview rubrics/follow-ups. API contracts and migrations V8–V10 are documented.
 
 ## Current status
 
@@ -37,6 +38,7 @@
 - Local integration is configured with ignored `frontend/.env` pointing to `http://localhost:8080`; backend CORS allows `http://localhost:5173`.
 - Frontend verification: TypeScript check passed, production build passed, and the existing routing test passed. Local HTTP smoke check returned frontend `200`, backend readiness `UP`, and CORS preflight `200`.
 - The local backend and frontend dev server were started for this session on ports 8080 and 5173. To restart them, run the backend JAR from the repository root and start Vite from `frontend/` on port 5173.
-- Phases 1–9 are implemented; continue frontend integration in Lovable against the backend.
+- Phases 1–10 backend APIs are implemented. The connected Lovable frontend can add onboarding goals, provenance-aware question cards, confidence prompts, option-level feedback, learning insights, a due-review flow, and rubric-guided mock-interview review using the updated API types/endpoints.
+- Phase 10 Java source compilation passed. Application startup and Flyway migration against local PostgreSQL still need confirmation after restarting the backend; no tests were added or run.
 - Phase 9 does not provision cloud resources or perform a deployment; choose a host and complete the listed launch controls when deployment is planned.
 - Voice interview assistant remains a later feature discussion.

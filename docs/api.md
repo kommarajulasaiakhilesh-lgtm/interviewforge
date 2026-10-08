@@ -103,6 +103,18 @@ Example MCQ request:
   "correctOptionIndex": 0,
   "answerText": "O(1) on average",
   "explanation": "Hashing provides constant-time average lookup.",
+  "optionExplanations": ["Correct on average; collisions can still occur.", "This is the worst-case behavior with many collisions."],
+  "theoryNotes": "A hash table maps keys to buckets. Average lookup is constant time under a suitable hash distribution.",
+  "workplaceExample": "Use a map for request ID to request metadata lookups.",
+  "misconceptionLabel": "Confusing average and worst-case complexity",
+  "scenarioContext": "A service needs to look up a user's session by token.",
+  "interviewStage": "TECHNICAL_SCREEN",
+  "sourceType": "ORIGINAL",
+  "sourceLabel": "InterviewForge editorial",
+  "sourceUrl": null,
+  "sourceVerifiedAt": null,
+  "evaluationCriteria": "State average and worst-case complexity; mention collisions.",
+  "followUpPrompt": "How would your answer change if the hash function had many collisions?",
   "tagIds": [],
   "published": false
 }
@@ -110,16 +122,27 @@ Example MCQ request:
 
 For `TEXT`, send no `options` and no `correctOptionIndex`; `answerText` may hold the expected answer. Question creation defaults to draft unless `published` is true. `PUT` replaces the question, including its tag list and publication state. Duplicate catalog names/slugs return `409`; missing IDs return `404`; invalid request data returns `400`.
 
+Question authoring also accepts `optionExplanations` (one reason per MCQ option), `theoryNotes`, `workplaceExample`, `misconceptionLabel`, `scenarioContext`, `interviewStage`, provenance fields `sourceType`, `sourceLabel`, `sourceUrl`, and `sourceVerifiedAt`, plus written-interview `evaluationCriteria` and `followUpPrompt`. Source types are `ORIGINAL`, `OFFICIAL`, `COMMUNITY_REPORTED`, `EDITORIAL`, or `UNKNOWN`. The student browse and practice prompt expose context, stage, and provenance but never the answer key or teaching notes. After an answer is submitted, practice feedback exposes the answer key, general explanation, per-option explanations, theory, workplace example, and misconception label. Do not represent community reports as verified employer questions.
+
 ## Practice (Phase 4)
 
 All routes require a bearer token and return data for the authenticated user's sessions only.
 
 - `POST /api/v1/practice/sessions` — create a random session. Request: `{ "topicId": "<uuid>", "difficulty": "MEDIUM", "type": "MCQ", "questionCount": 10 }`. `topicId`, `difficulty`, and `type` are optional; type defaults to MCQ. Count is required from 1 to 20. If too few matching published questions exist, response is `422`.
-- `POST /api/v1/practice/sessions/{sessionId}/answers` — submit one answer for a question in the session. MCQ: `{ "questionId": "<uuid>", "selectedOptionIndex": 1 }`. TEXT: `{ "questionId": "<uuid>", "answerText": "My response" }`.
+- `POST /api/v1/practice/sessions/{sessionId}/answers` — submit one answer for a question in the session. MCQ: `{ "questionId": "<uuid>", "selectedOptionIndex": 1, "confidenceRating": 3 }`. TEXT: `{ "questionId": "<uuid>", "answerText": "My response", "confidenceRating": 2 }`. Confidence is optional and ranges from 1 (guessing) to 5 (very confident).
 - `GET /api/v1/practice/sessions/{sessionId}` — review prompts and submitted answers. Correct answers/explanations are hidden until that question is answered.
 - `GET /api/v1/practice/sessions?page=0&size=20` — paged personal history, newest first (size 1–100).
+- `GET /api/v1/practice/review-queue?limit=20` — due MCQs missed or answered with low confidence, ordered by due date. Limit is 1–50.
+- `POST /api/v1/practice/review-queue/sessions?questionCount=10` — start a practice session using due MCQs. Count is 1–20; returns `422` when fewer due questions are available.
 
 Sessions complete when each question is answered once. MCQs are graded immediately; the answer response includes correctness, key, and explanation. `scorePercent` is available on completion and equals correct answers divided by session question count. TEXT sessions are stored for review but have no automatic score (`scorePercent` is null). Prompts and keys are snapshotted at session creation. Another user's/nonexistent session returns `404`; repeated submissions or submissions after completion return `400`.
+
+MCQ attempts create or update a personal spaced-review entry. Wrong answers and confidence ratings of 1–2 become due after one day. Correct, high-confidence answers lengthen the interval up to one year. The queue is per user and excludes archived/unpublished questions.
+
+## Learner preparation goals
+
+- `GET /api/v1/users/me/preparation` — read the authenticated user's target role, interview date, weekly study minutes, and optional job description.
+- `PATCH /api/v1/users/me/preparation` — replace those goal fields with `{ "targetRoleId": "<uuid>", "interviewDate": "2026-11-15", "weeklyStudyMinutes": 180, "jobDescription": "..." }`. Fields may be null to clear them. Weekly study time must be 15–1200 minutes; job description is limited to 12,000 characters. The target role must be active. The stored role ID can be used with the Readiness and Study Planning endpoints above. Job description text is stored for the user's preparation workflow and is not sent to an external AI service.
 
 ## Progress (Phase 5)
 
@@ -127,6 +150,7 @@ All progress endpoints require a bearer token and report only the authenticated 
 
 - `GET /api/v1/progress/overview` — total completed and in-progress sessions, MCQ questions answered/correct, overall accuracy, and the five most recent attempts. Accuracy is correct MCQ answers divided by answered MCQ questions; it is `null` before any MCQ answer.
 - `GET /api/v1/progress/topics` — answered/correct MCQ counts, accuracy, most recent answer time, and a topic rating for each topic with graded answers.
+- `GET /api/v1/progress/learning-insights` — accuracy by self-reported confidence and recurring misconception labels. Confidence data is grouped by rating; a minimum sample of three is suggested before treating calibration as meaningful. A misconception is listed after two misses.
 - `GET /api/v1/progress/attempts?page=0&size=20` — paginated personal session history, newest first.
 
 Topic ratings use at least five answered MCQs: `STRONG` is 80% or above; `DEVELOPING` is 60% to below 80%; `NEEDS_WORK` is below 60%. Topics with fewer attempts are `NOT_ENOUGH_DATA`. Text answers do not affect accuracy because they are not automatically graded. Existing attempt topic IDs are backfilled from their linked question during the Phase 5 migration; new attempts snapshot the topic when they start.
@@ -172,6 +196,8 @@ Each topic's accuracy is correct answers divided by answered MCQs (unattempted t
 
 The study plan includes topics with fewer than five attempts or below 80% accuracy. Each task recommends five MCQs and 30 minutes of practice, and includes reasons, current accuracy/count, and a priority (`topic weight × (100 − accuracy)`, rounded to the nearest integer). Higher priority is listed first, then topic name. Topics already at 80% or better with at least five attempts are omitted. Text answers are not counted because they are not automatically graded.
 
+Learner goal preferences can be stored at `/api/v1/users/me/preparation`; select that target role for these existing readiness and study-plan endpoints. The job description is retained as private preparation input and is not parsed or sent to an AI provider. The frontend can compose the dashboard daily brief from goal, readiness/study-plan, progress, and review-queue APIs.
+
 ## Mock interviews (Phase 8)
 
 All routes require a bearer token and operate only on the authenticated user's interview sessions. Interviews use published `TEXT` questions from active topics mapped to an active role. The role and company must also be active. Questions are selected at random and their prompt and skill attribution are snapshotted into the session. If fewer questions are available than requested, the API returns `422`.
@@ -182,3 +208,5 @@ All routes require a bearer token and operate only on the authenticated user's i
 - `GET /api/v1/mock-interviews?page=0&size=20` — paginated personal history, newest first (size 1–100).
 
 A session completes when every question is answered. Skill results report answered count, completion percentage, and the weighted mean of the user's self-ratings (`role skill importance × topic relevance`). These self-ratings are reflection aids, not a score of answer quality. The current backend does not automatically grade free-text answers. Non-owned or missing sessions return `404`; duplicate answers and answers after completion return `400`.
+
+Authors may provide an evaluation rubric and a follow-up prompt for a text question. These are snapshotted into a mock interview and returned in the owned session detail only after the answer is submitted, so the learner can reflect against consistent criteria. Follow-up prompts are curated and fixed, not AI-generated or adaptive.
