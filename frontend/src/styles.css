@@ -1,0 +1,118 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-display: "Sora", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-ink: var(--ink);
+  --color-ink-foreground: var(--ink-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-ring-offset-background: var(--background);
+}
+
+:root {
+  --radius: 0.75rem;
+  --background: oklch(0.975 0.012 85);
+  --foreground: oklch(0.22 0.03 255);
+  --card: oklch(0.995 0.005 85);
+  --card-foreground: oklch(0.22 0.03 255);
+  --popover: oklch(0.995 0.005 85);
+  --popover-foreground: oklch(0.22 0.03 255);
+  --primary: oklch(0.47 0.095 172);
+  --primary-foreground: oklch(0.98 0.01 170);
+  --secondary: oklch(0.93 0.02 85);
+  --secondary-foreground: oklch(0.25 0.03 255);
+  --muted: oklch(0.94 0.014 85);
+  --muted-foreground: oklch(0.5 0.025 255);
+  --accent: oklch(0.83 0.13 75);
+  --accent-foreground: oklch(0.25 0.05 60);
+  --destructive: oklch(0.56 0.2 27);
+  --destructive-foreground: oklch(0.98 0.01 27);
+  --success: oklch(0.6 0.13 155);
+  --success-foreground: oklch(0.98 0.02 155);
+  --warning: oklch(0.78 0.14 75);
+  --warning-foreground: oklch(0.28 0.06 60);
+  --ink: oklch(0.22 0.035 255);
+  --ink-foreground: oklch(0.96 0.015 85);
+  --border: oklch(0.88 0.018 85);
+  --input: oklch(0.86 0.02 85);
+  --ring: oklch(0.47 0.095 172);
+  --shadow-card: 4px 4px 0 0 oklch(0.22 0.035 255);
+  --shadow-card-hover: 7px 7px 0 0 oklch(0.47 0.095 172);
+  --grid-line: oklch(0.22 0.03 255 / 5%);
+  --gradient-hero: radial-gradient(120% 80% at 0% 0%, oklch(0.83 0.13 75 / 35%), transparent 60%),
+    radial-gradient(90% 70% at 100% 100%, oklch(0.47 0.095 172 / 30%), transparent 60%);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+  ::selection { background: var(--accent); color: var(--accent-foreground); }
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
+}
+
+@utility shadow-card {
+  box-shadow: var(--shadow-card);
+}
+@utility bg-hero {
+  background-image: var(--gradient-hero);
+}
+
+@utility shadow-card-hover {
+  box-shadow: var(--shadow-card-hover);
+}
+@utility eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+@keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@utility animate-rise {
+  animation: rise 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
