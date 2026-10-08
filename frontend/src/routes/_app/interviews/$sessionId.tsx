@@ -90,7 +90,7 @@ function MockQuestion({ sessionId, item }: { sessionId: string; item: MockAnswer
   return (
     <Card>
       <div className="flex flex-wrap items-center gap-2">
-        <span className="font-display text-sm font-bold text-muted-foreground">Q{item.position + 1}</span>
+        <span className="font-display text-sm font-bold text-muted-foreground">Q{item.position}</span>
         <Badge tone="primary">{item.skillName}</Badge>
         <Badge tone={difficultyTone(item.difficulty)}>{humanize(item.difficulty)}</Badge>
       </div>

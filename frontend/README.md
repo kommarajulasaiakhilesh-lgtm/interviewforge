@@ -44,6 +44,8 @@ Two things to check if pages show a connection error:
    Spring Boot that is `@CrossOrigin` or a `WebMvcConfigurer` mapping the
    dev origin.
 
+For local development, use the exact frontend origin `http://localhost:5173`; the backend defaults to allowing it. If you change the Vite port or hostname, update `APP_CORS_ALLOWED_ORIGINS` to match. The local frontend `.env` should point to `http://localhost:8080`.
+
 ## Where things live
 
 | Path | Purpose |

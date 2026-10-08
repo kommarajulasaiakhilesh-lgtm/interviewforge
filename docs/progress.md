@@ -33,9 +33,10 @@
 
 ## Current status
 
-- Phases 1–9 are implemented; the web application is the next planned deliverable in Lovable.
+- The Lovable frontend was pushed under `frontend/` in commit `af36cb3` and fast-forwarded into the local checkout. Its API client uses the backend's documented `/api/v1` endpoints.
+- Local integration is configured with ignored `frontend/.env` pointing to `http://localhost:8080`; backend CORS allows `http://localhost:5173`.
+- Frontend verification: TypeScript check passed, production build passed, and the existing routing test passed. Local HTTP smoke check returned frontend `200`, backend readiness `UP`, and CORS preflight `200`.
+- The local backend and frontend dev server were started for this session on ports 8080 and 5173. To restart them, run the backend JAR from the repository root and start Vite from `frontend/` on port 5173.
+- Phases 1–9 are implemented; continue frontend integration in Lovable against the backend.
 - Phase 9 does not provision cloud resources or perform a deployment; choose a host and complete the listed launch controls when deployment is planned.
-- The local backend was started successfully, PostgreSQL connected, and Flyway migrated the local database through schema version 7. `/actuator/health` and `/actuator/health/readiness` both returned `UP`.
-- The local backend process was stopped at the user's request. Restart it later with `java -jar target/interviewforge-api-0.1.0-SNAPSHOT.jar` from the repository directory, or `mvn spring-boot:run` with Maven's local repository set to `C:/Users/vysh1/.m2/repository`.
-- Next time: the user plans to build the web frontend in Lovable and integrate it with this backend. Do not start frontend work until the user returns and asks.
 - Voice interview assistant remains a later feature discussion.
