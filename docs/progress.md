@@ -43,7 +43,7 @@
 - Frontend verification: TypeScript check passed, production build passed, and the existing routing test passed. Local HTTP smoke check returned frontend `200`, backend readiness `UP`, and CORS preflight `200`.
 - The local backend and PostgreSQL were started for this session; frontend is available on port 5173 and the backend on port 8080. PostgreSQL was started with `pg_ctl` because the Windows service could not be opened from this session.
 - Phase 11 frontend calls use the existing authenticated API client, which attaches the current bearer token and handles unauthorized responses consistently with the rest of the app.
-- Phase 11 Java source compilation and frontend TypeScript checking passed. Phase 12 JavaScript/TypeScript changes are being checked now. The production build could not clear the existing OneDrive-synced `frontend/.output` directory (`EPERM`). Migration V12 is intended to seed starter roles and MCQs; verify its application on backend restart. No tests were added or run.
+- Phase 11 Java compilation and Phase 12 frontend TypeScript checking passed; ESLint passed on the new shared frontend components. Maven packaged the backend with tests skipped. Local Flyway V12 applied successfully and seeded 7 topics, 21 published MCQs, and 8 generic roles. The backend health endpoint is `UP`, and the dashboard route returned HTTP 200. The production frontend build previously hit `EPERM` clearing the OneDrive-synced `frontend/.output`; the Vite development server is running. No tests were added or run.
 - Phase 9 does not provision cloud resources or perform a deployment; choose a host and complete the listed launch controls when deployment is planned.
 - Voice interview assistant remains a later feature discussion.
 
