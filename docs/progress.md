@@ -3,8 +3,8 @@
 ## Product and ownership
 
 - InterviewForge is an adaptive interview preparation platform.
-- This repository contains the backend API. The user will build the frontend later in Lovable, after the backend is complete.
-- Keep API contracts documented for that separate frontend.
+- This repository contains the Java backend and the Lovable-synced frontend under `frontend/`.
+- Keep the API-first separation: the frontend calls documented `/api/v1` endpoints and never accesses persistence entities directly.
 
 ## Development setup
 
@@ -17,7 +17,7 @@
 
 - Work in the phases listed in `PLANS.md`.
 - Commit and push each completed phase to `https://github.com/kommarajulasaiakhilesh-lgtm/interviewforge.git` on `main`.
-- Do not start frontend implementation in this repository; frontend work belongs to the user's later Lovable work.
+- The user builds the frontend in Lovable; commits pushed to the connected GitHub branch sync to Lovable.
 
 ## Completed phases
 
@@ -33,19 +33,20 @@
 - Phase 10: provenance-aware question content, per-option coaching, theory and workplace examples, misconception labels, interview scenarios and stages, confidence capture, spaced review, learning insights, learner goals, and mock-interview rubrics/follow-ups. API contracts and migrations V8–V10 are documented.
 - Phase 10 was committed and pushed to `main` as `16720f3` (`feat: add adaptive interview coaching loop`). Java source compilation and frontend TypeScript checking passed. The runnable JAR packaging attempt was blocked because Windows denied Maven's rename of the existing JAR under `target`; backend startup and the V8–V10 Flyway application were not verified. The user asked to pause and continue later.
 - Phase 11: role/topic-linked branching workplace cases with admin graph authoring, strict graph validation, evolving decision paths, post-choice feedback for every option, trade-off/misconception explanations, outcome lessons, rubric points, owner-only history, and session graph snapshots. Flyway migration V11 and Lovable API types/endpoints are documented.
+- Phase 11 frontend integration: signed-in learners can browse published cases, start and resume sessions, submit branching choices, review selected and alternative-option coaching, inspect outcomes, and open recent case history.
 
 ## Current status
 
 - The Lovable frontend was pushed under `frontend/` in commit `af36cb3` and fast-forwarded into the local checkout. Its API client uses the backend's documented `/api/v1` endpoints.
 - Local integration is configured with ignored `frontend/.env` pointing to `http://localhost:8080`; backend CORS allows `http://localhost:5173`.
 - Frontend verification: TypeScript check passed, production build passed, and the existing routing test passed. Local HTTP smoke check returned frontend `200`, backend readiness `UP`, and CORS preflight `200`.
-- The local backend and frontend dev server were started for this session on ports 8080 and 5173. To restart them, run the backend JAR from the repository root and start Vite from `frontend/` on port 5173.
-- Phases 1–11 backend APIs are implemented. The connected Lovable frontend can add the Phase 10 learning loop and Phase 11 branching workplace case flows using the updated API types/endpoints.
-- Phase 11 Java source compilation and frontend TypeScript checking passed. Application startup and Flyway migrations V8–V11 against local PostgreSQL still need confirmation after restarting the backend; no tests were added or run.
+- The backend was stopped at the user's request. Frontend runs from `frontend/` on port 5173 and calls the backend at `http://localhost:8080` using ignored `frontend/.env`.
+- Phase 11 frontend calls use the existing authenticated API client, which attaches the current bearer token and handles unauthorized responses consistently with the rest of the app.
+- Phase 11 Java source compilation and frontend TypeScript checking passed. The production build could not clear the existing OneDrive-synced `frontend/.output` directory (`EPERM`); application startup and Flyway migrations V8–V11 against local PostgreSQL still need confirmation. No tests were added or run.
 - Phase 9 does not provision cloud resources or perform a deployment; choose a host and complete the listed launch controls when deployment is planned.
 - Voice interview assistant remains a later feature discussion.
 
-## Phase 11 product direction (implemented in backend; frontend wiring pending)
+## Phase 11 product direction (backend and frontend wired; runtime verification pending)
 
 The user wants InterviewForge to feel distinct from Google Interview Warmup and Yoodli, with a focus on teaching job-related reasoning rather than centering speech analytics. Phase 11 implements **Branching Workplace Cases**. A learner chooses an action in a realistic case, receives new facts or constraints, makes a follow-up decision, and reviews trade-offs, misconception-specific feedback, all-option explanations, and an outcome lesson.
 

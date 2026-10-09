@@ -25,6 +25,8 @@ import { Route as AppPracticeIndexRouteImport } from './routes/_app/practice/ind
 import { Route as AppPracticeSessionIdRouteImport } from './routes/_app/practice/$sessionId'
 import { Route as AppRolesRoleIdRouteImport } from './routes/_app/roles/$roleId'
 import { Route as AppSetsSetIdRouteImport } from './routes/_app/sets/$setId'
+import { Route as AppWorkplaceCasesIndexRouteImport } from './routes/_app/workplace-cases/index'
+import { Route as AppWorkplaceCasesSessionsSessionIdRouteImport } from './routes/_app/workplace-cases/sessions/$sessionId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -105,6 +107,17 @@ const AppSetsSetIdRoute = AppSetsSetIdRouteImport.update({
   path: '/sets/$setId',
   getParentRoute: () => AppRouteRoute,
 } as any)
+const AppWorkplaceCasesIndexRoute = AppWorkplaceCasesIndexRouteImport.update({
+  id: '/workplace-cases/',
+  path: '/workplace-cases/',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppWorkplaceCasesSessionsSessionIdRoute =
+  AppWorkplaceCasesSessionsSessionIdRouteImport.update({
+    id: '/workplace-cases/sessions/$sessionId',
+    path: '/workplace-cases/sessions/$sessionId',
+    getParentRoute: () => AppRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -122,6 +135,8 @@ export interface FileRoutesByFullPath {
   '/companies/': typeof AppCompaniesIndexRoute
   '/interviews/': typeof AppInterviewsIndexRoute
   '/practice/': typeof AppPracticeIndexRoute
+  '/workplace-cases/': typeof AppWorkplaceCasesIndexRoute
+  '/workplace-cases/sessions/$sessionId': typeof AppWorkplaceCasesSessionsSessionIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -139,6 +154,8 @@ export interface FileRoutesByTo {
   '/companies': typeof AppCompaniesIndexRoute
   '/interviews': typeof AppInterviewsIndexRoute
   '/practice': typeof AppPracticeIndexRoute
+  '/workplace-cases': typeof AppWorkplaceCasesIndexRoute
+  '/workplace-cases/sessions/$sessionId': typeof AppWorkplaceCasesSessionsSessionIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -158,6 +175,8 @@ export interface FileRoutesById {
   '/_app/companies/': typeof AppCompaniesIndexRoute
   '/_app/interviews/': typeof AppInterviewsIndexRoute
   '/_app/practice/': typeof AppPracticeIndexRoute
+  '/_app/workplace-cases/': typeof AppWorkplaceCasesIndexRoute
+  '/_app/workplace-cases/sessions/$sessionId': typeof AppWorkplaceCasesSessionsSessionIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -177,6 +196,8 @@ export interface FileRouteTypes {
     | '/companies/'
     | '/interviews/'
     | '/practice/'
+    | '/workplace-cases/'
+    | '/workplace-cases/sessions/$sessionId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -194,6 +215,8 @@ export interface FileRouteTypes {
     | '/companies'
     | '/interviews'
     | '/practice'
+    | '/workplace-cases'
+    | '/workplace-cases/sessions/$sessionId'
   id:
     | '__root__'
     | '/'
@@ -212,6 +235,8 @@ export interface FileRouteTypes {
     | '/_app/companies/'
     | '/_app/interviews/'
     | '/_app/practice/'
+    | '/_app/workplace-cases/'
+    | '/_app/workplace-cases/sessions/$sessionId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -335,6 +360,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppSetsSetIdRouteImport
       parentRoute: typeof AppRouteRoute
     }
+    '/_app/workplace-cases/': {
+      id: '/_app/workplace-cases/'
+      path: '/workplace-cases'
+      fullPath: '/workplace-cases/'
+      preLoaderRoute: typeof AppWorkplaceCasesIndexRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/_app/workplace-cases/sessions/$sessionId': {
+      id: '/_app/workplace-cases/sessions/$sessionId'
+      path: '/workplace-cases/sessions/$sessionId'
+      fullPath: '/workplace-cases/sessions/$sessionId'
+      preLoaderRoute: typeof AppWorkplaceCasesSessionsSessionIdRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
   }
 }
 
@@ -351,6 +390,8 @@ interface AppRouteRouteChildren {
   AppCompaniesIndexRoute: typeof AppCompaniesIndexRoute
   AppInterviewsIndexRoute: typeof AppInterviewsIndexRoute
   AppPracticeIndexRoute: typeof AppPracticeIndexRoute
+  AppWorkplaceCasesIndexRoute: typeof AppWorkplaceCasesIndexRoute
+  AppWorkplaceCasesSessionsSessionIdRoute: typeof AppWorkplaceCasesSessionsSessionIdRoute
 }
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
@@ -366,6 +407,9 @@ const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppCompaniesIndexRoute: AppCompaniesIndexRoute,
   AppInterviewsIndexRoute: AppInterviewsIndexRoute,
   AppPracticeIndexRoute: AppPracticeIndexRoute,
+  AppWorkplaceCasesIndexRoute: AppWorkplaceCasesIndexRoute,
+  AppWorkplaceCasesSessionsSessionIdRoute:
+    AppWorkplaceCasesSessionsSessionIdRoute,
 }
 
 const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(
