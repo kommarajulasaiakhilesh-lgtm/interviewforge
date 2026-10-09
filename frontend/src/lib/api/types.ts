@@ -372,6 +372,148 @@ export interface PreparationGoal {
   jobDescription: string | null;
 }
 
+// Branching workplace case practice
+export type CaseNodeType = "START" | "DECISION" | "OUTCOME";
+export type DecisionQuality = "STRONG" | "VIABLE" | "RISKY";
+export type WorkplaceCaseStatus = "IN_PROGRESS" | "COMPLETED";
+export interface WorkplaceCaseSummary {
+  id: UUID;
+  title: string;
+  slug: string;
+  description: string | null;
+  roleId: UUID;
+  roleName: string;
+  topicId: UUID;
+  topicName: string;
+  difficulty: Difficulty;
+  estimatedMinutes: number;
+  learningObjective: string | null;
+  sourceType: string | null;
+  sourceLabel: string | null;
+  sourceUrl: string | null;
+  sourceVerifiedAt: ISODate | null;
+}
+export interface WorkplaceCaseChoiceInput {
+  choiceKey: string;
+  choiceLabel: string;
+  choiceText: string;
+  decisionQuality: DecisionQuality;
+  explanation: string;
+  whenAppropriate?: string | null;
+  tradeoffSummary?: string | null;
+  misconceptionLabel?: string | null;
+  nextNodeKey: string;
+}
+export interface WorkplaceCaseNodeInput {
+  nodeKey: string;
+  nodeType: CaseNodeType;
+  heading: string;
+  situationText: string;
+  lessonText?: string | null;
+  choices?: WorkplaceCaseChoiceInput[];
+}
+export interface AdminWorkplaceCaseInput {
+  title: string;
+  slug?: string | null;
+  description?: string | null;
+  roleId: UUID;
+  topicId: UUID;
+  difficulty: Difficulty;
+  estimatedMinutes: number;
+  scenarioIntro: string;
+  learningObjective?: string | null;
+  sourceType?: string | null;
+  sourceLabel?: string | null;
+  sourceUrl?: string | null;
+  sourceVerifiedAt?: ISODate | null;
+  published: boolean;
+  nodes: WorkplaceCaseNodeInput[];
+}
+export interface AdminWorkplaceCaseDetail {
+  workplaceCase: WorkplaceCaseSummary;
+  scenarioIntro: string;
+  published: boolean;
+  archived: boolean;
+  nodes: WorkplaceCaseNodeInput[];
+  createdAt: ISODate;
+  updatedAt: ISODate;
+}
+export interface CaseChoicePrompt {
+  choiceKey: string;
+  choiceLabel: string;
+  choiceText: string;
+}
+export interface CaseNodePrompt {
+  nodeKey: string;
+  nodeType: CaseNodeType;
+  heading: string;
+  situationText: string;
+  lessonText: string | null;
+  choices: CaseChoicePrompt[];
+}
+export interface WorkplaceCaseSessionSummary {
+  sessionId: UUID;
+  caseId: UUID;
+  caseTitle: string;
+  roleId: UUID;
+  roleName: string;
+  difficulty: Difficulty;
+  status: WorkplaceCaseStatus;
+  decisionCount: number;
+  totalPoints: number;
+  decisionScorePercent: number | null;
+  startedAt: ISODate;
+  completedAt: ISODate | null;
+}
+export interface StartWorkplaceCaseResponse {
+  session: WorkplaceCaseSessionSummary;
+  scenarioIntro: string;
+  learningObjective: string | null;
+  sourceType: string | null;
+  sourceLabel: string | null;
+  sourceUrl: string | null;
+  sourceVerifiedAt: ISODate | null;
+  currentNode: CaseNodePrompt;
+}
+export interface WorkplaceCaseDecisionReview {
+  position: number;
+  nodeHeading: string;
+  choiceLabel: string;
+  choiceText: string;
+  decisionQuality: DecisionQuality;
+  qualityPoints: number;
+  explanation: string;
+  whenAppropriate: string | null;
+  tradeoffSummary: string | null;
+  misconceptionLabel: string | null;
+  nextNodeKey: string;
+  answeredAt: ISODate;
+  choiceFeedback: {
+    choiceKey: string;
+    choiceLabel: string;
+    choiceText: string;
+    decisionQuality: DecisionQuality;
+    qualityPoints: number;
+    explanation: string;
+    whenAppropriate: string | null;
+    tradeoffSummary: string | null;
+    misconceptionLabel: string | null;
+    selected: boolean;
+  }[];
+}
+export interface WorkplaceCaseSessionDetail {
+  session: WorkplaceCaseSessionSummary;
+  scenarioIntro: string;
+  learningObjective: string | null;
+  currentNode: CaseNodePrompt;
+  decisions: WorkplaceCaseDecisionReview[];
+}
+export interface WorkplaceCaseDecisionResponse {
+  session: WorkplaceCaseSessionSummary;
+  decision: WorkplaceCaseDecisionReview;
+  nextNode: CaseNodePrompt;
+}
+
 // RFC 7807 problem+json error body
 export interface ProblemDetail {
   type?: string;

@@ -31,6 +31,30 @@ export const preparationGoalApi = {
   update: (goal: T.PreparationGoal) => api<T.PreparationGoal>("/users/me/preparation", { method: "PATCH", body: goal }),
 };
 
+export const workplaceCaseApi = {
+  browse: (filters: { roleId?: string; topicId?: string; difficulty?: T.Difficulty; page?: number; size?: number } = {}) =>
+    api<T.Page<T.WorkplaceCaseSummary>>("/workplace-cases", { query: { ...filters } }),
+  get: (caseId: string) => api<T.WorkplaceCaseSummary>(`/workplace-cases/${caseId}`),
+  start: (caseId: string) => api<T.StartWorkplaceCaseResponse>(`/workplace-cases/${caseId}/sessions`, { method: "POST" }),
+  decide: (sessionId: string, nodeKey: string, choiceKey: string) =>
+    api<T.WorkplaceCaseDecisionResponse>(`/workplace-cases/sessions/${sessionId}/decisions`, {
+      method: "POST",
+      body: { nodeKey, choiceKey },
+    }),
+  session: (sessionId: string) => api<T.WorkplaceCaseSessionDetail>(`/workplace-cases/sessions/${sessionId}`),
+  history: (page = 0, size = 20) =>
+    api<T.Page<T.WorkplaceCaseSessionSummary>>("/workplace-cases/sessions", { query: { page, size } }),
+};
+
+export const adminWorkplaceCaseApi = {
+  browse: (page = 0, size = 20) => api<T.Page<T.AdminWorkplaceCaseDetail>>("/admin/workplace-cases", { query: { page, size } }),
+  get: (caseId: string) => api<T.AdminWorkplaceCaseDetail>(`/admin/workplace-cases/${caseId}`),
+  create: (body: T.AdminWorkplaceCaseInput) => api<T.AdminWorkplaceCaseDetail>("/admin/workplace-cases", { method: "POST", body }),
+  update: (caseId: string, body: T.AdminWorkplaceCaseInput) =>
+    api<T.AdminWorkplaceCaseDetail>(`/admin/workplace-cases/${caseId}`, { method: "PUT", body }),
+  archive: (caseId: string) => api<void>(`/admin/workplace-cases/${caseId}`, { method: "DELETE" }),
+};
+
 export const progressApi = {
   overview: () => api<T.ProgressOverview>("/progress/overview"),
   topics: () => api<T.TopicProgress>("/progress/topics"),

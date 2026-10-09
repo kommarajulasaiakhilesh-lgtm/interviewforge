@@ -10,5 +10,6 @@
 8. Mock interviews
 9. Production polish, security review, deployment, and monitoring (provider-neutral JAR deployment guidance)
 10. Explainable learning loop: source provenance, option-level teaching, confidence calibration, spaced review, learner goals, and structured mock-interview rubrics
+11. Branching workplace cases: authored decision paths, evolving constraints, trade-off feedback, misconception explanations, and transfer practice
 
-Phases 1–9 are complete. Phase 10 adds backend capabilities and contracts for the InterviewForge coaching experience. Wire the page interactions in the connected Lovable frontend against these endpoints. Voice AI remains deferred as previously agreed; achievements/leaderboards and isolated coding submissions are future extensions.
+Phases 1–10 are complete. Phase 11 implements the API and data model for authored, branching workplace scenarios. Wire page interactions in the connected Lovable frontend against the documented contract. Voice AI remains deferred as previously agreed; achievements/leaderboards and isolated coding submissions are future extensions.

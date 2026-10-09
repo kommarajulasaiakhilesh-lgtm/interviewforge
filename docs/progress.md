@@ -31,6 +31,8 @@
 - Phase 8: role-specific mock interview sessions, answer capture, self-ratings, and per-skill completion/results. Completed in this phase delivery.
 - Phase 9: security headers and route review, sanitized health probes/build info, production configuration, Java JAR deployment guidance, and GitHub Actions packaging workflow. Completed in this phase delivery.
 - Phase 10: provenance-aware question content, per-option coaching, theory and workplace examples, misconception labels, interview scenarios and stages, confidence capture, spaced review, learning insights, learner goals, and mock-interview rubrics/follow-ups. API contracts and migrations V8–V10 are documented.
+- Phase 10 was committed and pushed to `main` as `16720f3` (`feat: add adaptive interview coaching loop`). Java source compilation and frontend TypeScript checking passed. The runnable JAR packaging attempt was blocked because Windows denied Maven's rename of the existing JAR under `target`; backend startup and the V8–V10 Flyway application were not verified. The user asked to pause and continue later.
+- Phase 11: role/topic-linked branching workplace cases with admin graph authoring, strict graph validation, evolving decision paths, post-choice feedback for every option, trade-off/misconception explanations, outcome lessons, rubric points, owner-only history, and session graph snapshots. Flyway migration V11 and Lovable API types/endpoints are documented.
 
 ## Current status
 
@@ -38,7 +40,23 @@
 - Local integration is configured with ignored `frontend/.env` pointing to `http://localhost:8080`; backend CORS allows `http://localhost:5173`.
 - Frontend verification: TypeScript check passed, production build passed, and the existing routing test passed. Local HTTP smoke check returned frontend `200`, backend readiness `UP`, and CORS preflight `200`.
 - The local backend and frontend dev server were started for this session on ports 8080 and 5173. To restart them, run the backend JAR from the repository root and start Vite from `frontend/` on port 5173.
-- Phases 1–10 backend APIs are implemented. The connected Lovable frontend can add onboarding goals, provenance-aware question cards, confidence prompts, option-level feedback, learning insights, a due-review flow, and rubric-guided mock-interview review using the updated API types/endpoints.
-- Phase 10 Java source compilation passed. Application startup and Flyway migration against local PostgreSQL still need confirmation after restarting the backend; no tests were added or run.
+- Phases 1–11 backend APIs are implemented. The connected Lovable frontend can add the Phase 10 learning loop and Phase 11 branching workplace case flows using the updated API types/endpoints.
+- Phase 11 Java source compilation and frontend TypeScript checking passed. Application startup and Flyway migrations V8–V11 against local PostgreSQL still need confirmation after restarting the backend; no tests were added or run.
 - Phase 9 does not provision cloud resources or perform a deployment; choose a host and complete the listed launch controls when deployment is planned.
 - Voice interview assistant remains a later feature discussion.
+
+## Phase 11 product direction (implemented in backend; frontend wiring pending)
+
+The user wants InterviewForge to feel distinct from Google Interview Warmup and Yoodli, with a focus on teaching job-related reasoning rather than centering speech analytics. Phase 11 implements **Branching Workplace Cases**. A learner chooses an action in a realistic case, receives new facts or constraints, makes a follow-up decision, and reviews trade-offs, misconception-specific feedback, all-option explanations, and an outcome lesson.
+
+Related candidate features to consider when work resumes:
+
+- Explain why each wrong choice seemed plausible, identify its misconception, and show when that choice could be appropriate.
+- Constraint-change drills that vary scale, cost, security, team size, or time limits to test transfer beyond memorized answers.
+- A traceable job-requirement evidence map connecting job-description requirements to skills, questions, and demonstrated readiness.
+- A private personal-experience bank mapping project/work/school examples to competencies and STAR structure.
+- A decision trade-off journal that captures the learner's assumptions, priorities, and evidence that would change their decision.
+- Source trust/freshness labels, with clear separation between official, original/editorial, and community-reported questions.
+- Two-way interview preparation for questions the candidate should ask about success measures, team challenges, and early role expectations.
+
+Keep the agreed API-first Java backend and separate Lovable frontend. The first case release uses authored, rule-based paths and does not require paid AI. The next product backlog candidates are the job-requirement evidence map and private personal-experience bank; revisit these after the user reviews Phase 11. Voice AI remains deferred.

@@ -101,3 +101,12 @@ Defer AI assistance, leaderboards, and arbitrary submitted-code execution until 
 - Users can save their target role, interview date, weekly study time, and private job description; the existing readiness and study plan APIs support that target role.
 - Mock interview questions can include a curated evaluation rubric and follow-up prompt, revealed only after the answer; the API clearly states these are not automatic AI grading.
 - Flyway migrations, API contract, privacy behavior, and frontend integration types/endpoints are documented for Lovable.
+
+## Phase 11 acceptance checklist
+
+- Admins can author, replace, publish, unpublish, and archive role/topic-specific workplace case graphs with provenance.
+- Graph validation requires exactly one initial step, 2–6 choices at each decision step, valid references, full reachability, no cycles, and terminal outcome steps with lessons.
+- Learners see only the current situation and choices before answering; after choosing they see feedback for each option, trade-offs, misconceptions, and the next situation on their chosen branch.
+- Sessions snapshot the full graph and keep owner-only decision history even if the source case is edited or archived later.
+- Rule-based rubric points distinguish strong, viable, and risky choices without claiming to predict hiring outcomes.
+- Flyway schema, API examples, validation behavior, and typed frontend endpoints are documented for Lovable.

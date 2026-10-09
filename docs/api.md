@@ -210,3 +210,67 @@ All routes require a bearer token and operate only on the authenticated user's i
 A session completes when every question is answered. Skill results report answered count, completion percentage, and the weighted mean of the user's self-ratings (`role skill importance × topic relevance`). These self-ratings are reflection aids, not a score of answer quality. The current backend does not automatically grade free-text answers. Non-owned or missing sessions return `404`; duplicate answers and answers after completion return `400`.
 
 Authors may provide an evaluation rubric and a follow-up prompt for a text question. These are snapshotted into a mock interview and returned in the owned session detail only after the answer is submitted, so the learner can reflect against consistent criteria. Follow-up prompts are curated and fixed, not AI-generated or adaptive.
+
+## Branching workplace cases (Phase 11)
+
+All learner routes require a bearer token. Session reads and decisions are limited to the authenticated owner. Admin routes require the `ADMIN` role.
+
+### Learner routes
+
+- `GET /api/v1/workplace-cases?roleId=<uuid>&topicId=<uuid>&difficulty=MEDIUM&page=0&size=20` — published cases for active roles, companies, and topics; all filters are optional.
+- `GET /api/v1/workplace-cases/{caseId}` — student-safe case catalog details. This does not expose the decision graph or feedback.
+- `POST /api/v1/workplace-cases/{caseId}/sessions` — start a case and receive its introduction, source provenance, and first step. No request body is required.
+- `POST /api/v1/workplace-cases/sessions/{sessionId}/decisions` — submit `{ "nodeKey": "INITIAL", "choiceKey": "INVESTIGATE" }`. The response explains the chosen action, its trade-offs, any misconception, and the next step.
+- `GET /api/v1/workplace-cases/sessions/{sessionId}` — resume or review an owned session, showing prior feedback and the current step.
+- `GET /api/v1/workplace-cases/sessions?page=0&size=20` — paginated personal case history, newest first.
+
+Each START/DECISION node offers 2–6 choices. The chosen path changes which situation appears next. OUTCOME nodes show the lesson and end the session. Before answering, the user sees only choice text; after choosing, feedback explains every option, including why alternatives may be risky and when they could be appropriate. Case graphs are snapshotted at session start; later admin edits do not alter active or historical sessions.
+
+Decision quality is author-curated: `STRONG` contributes 2 points, `VIABLE` 1, and `RISKY` 0. Multiple choices may be strong or viable when the scenario supports more than one defensible trade-off. The session's decision score summarizes this case rubric only; it is not a prediction of hiring outcome or general role readiness. Avoid presenting one choice as universally correct when its quality depends on context. A case must have one START node, reachable steps, no cycles, and every path must terminate at an OUTCOME.
+
+### Admin authoring routes
+
+- `GET /api/v1/admin/workplace-cases?page=0&size=20` and `GET /api/v1/admin/workplace-cases/{caseId}` — include unpublished and archived cases for authoring.
+- `POST /api/v1/admin/workplace-cases` — create a case.
+- `PUT /api/v1/admin/workplace-cases/{caseId}` — replace the case and its complete graph; updates do not affect existing sessions because their graph is snapshotted.
+- `DELETE /api/v1/admin/workplace-cases/{caseId}` — archive the case without deleting session history.
+
+Create/update input contains case metadata (`title`, optional `slug`, `description`, `roleId`, `topicId`, `difficulty`, `estimatedMinutes`, `scenarioIntro`, `learningObjective`, source fields, `published`) and an ordered `nodes` array. Each node includes `nodeKey`, `nodeType` (`START`, `DECISION`, `OUTCOME`), `heading`, `situationText`, optional `lessonText`, and `choices`. Each choice includes `choiceKey`, `choiceLabel`, `choiceText`, `decisionQuality`, `explanation`, optional `whenAppropriate`, `tradeoffSummary`, and `misconceptionLabel`, plus `nextNodeKey`. Source types match question authoring: `ORIGINAL`, `OFFICIAL`, `COMMUNITY_REPORTED`, `EDITORIAL`, or `UNKNOWN`. Every choice must explain its consequences and point to another node in the same case. Invalid or cyclic graphs return `400`; duplicate slugs return `409`; insufficient pagination bounds return `400`.
+
+Example graph shape (IDs are existing active role/topic IDs):
+
+```json
+{
+  "title": "Investigate a latency spike",
+  "roleId": "<role-uuid>",
+  "topicId": "<topic-uuid>",
+  "difficulty": "MEDIUM",
+  "estimatedMinutes": 10,
+  "scenarioIntro": "A production API's p95 latency doubled after a release.",
+  "learningObjective": "Choose safe first steps and adapt as evidence arrives.",
+  "sourceType": "ORIGINAL",
+  "sourceLabel": "InterviewForge scenario",
+  "published": true,
+  "nodes": [
+    {
+      "nodeKey": "INITIAL", "nodeType": "START", "heading": "Choose the first move",
+      "situationText": "Errors are flat, but the latency alert is still active.",
+      "choices": [
+        { "choiceKey": "CHECK", "choiceLabel": "Inspect traces", "choiceText": "Compare traces and recent changes.", "decisionQuality": "STRONG", "explanation": "This gathers evidence while limiting risk.", "nextNodeKey": "TRACE_RESULT" },
+        { "choiceKey": "ROLLBACK", "choiceLabel": "Rollback now", "choiceText": "Immediately revert the latest release.", "decisionQuality": "VIABLE", "explanation": "Rollback can be right if user impact is severe or the release is clearly causal.", "whenAppropriate": "Use this when impact is high and a safe rollback is available.", "nextNodeKey": "ROLLBACK_OUTCOME" }
+      ]
+    },
+    {
+      "nodeKey": "TRACE_RESULT", "nodeType": "DECISION", "heading": "New evidence changes the decision",
+      "situationText": "Traces show a connection-pool wait after a query change. The error rate is now rising.",
+      "choices": [
+        { "choiceKey": "MITIGATE", "choiceLabel": "Reduce pool pressure", "choiceText": "Limit the affected traffic while validating the query change.", "decisionQuality": "STRONG", "explanation": "It reduces immediate impact and keeps the cause under investigation.", "tradeoffSummary": "Traffic is temporarily constrained while the issue is isolated.", "nextNodeKey": "MITIGATION_OUTCOME" },
+        { "choiceKey": "WAIT", "choiceLabel": "Wait for more data", "choiceText": "Avoid changing anything until the metrics stabilize.", "decisionQuality": "RISKY", "explanation": "The rising error rate makes waiting costly; collect more evidence while taking a reversible mitigation.", "misconceptionLabel": "Treating observation and mitigation as mutually exclusive", "nextNodeKey": "WAIT_OUTCOME" }
+      ]
+    },
+    { "nodeKey": "MITIGATION_OUTCOME", "nodeType": "OUTCOME", "heading": "Mitigation outcome", "situationText": "The error rate stops rising while the team checks the query change.", "lessonText": "During an incident, pair evidence gathering with reversible steps that reduce user impact." },
+    { "nodeKey": "WAIT_OUTCOME", "nodeType": "OUTCOME", "heading": "Delay outcome", "situationText": "The error rate continues to rise while the team waits.", "lessonText": "When impact worsens, observation alone may be insufficient; choose a reversible mitigation and keep collecting evidence." },
+    { "nodeKey": "ROLLBACK_OUTCOME", "nodeType": "OUTCOME", "heading": "Rollback result", "situationText": "The rollback restores latency, but hides the exact source of the regression.", "lessonText": "When impact warrants a fast rollback, follow it with evidence collection and a safe regression analysis." }
+  ]
+}
+```

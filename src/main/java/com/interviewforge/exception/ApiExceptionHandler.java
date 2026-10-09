@@ -5,6 +5,7 @@ import com.interviewforge.auth.InvalidCredentialsException;
 import com.interviewforge.auth.PasswordTooLongException;
 import com.interviewforge.questionbank.ResourceNotFoundException;
 import com.interviewforge.practice.InsufficientQuestionsException;
+import com.interviewforge.workplacecase.DuplicateWorkplaceCaseSlugException;
 import jakarta.servlet.http.HttpServletRequest;
 import java.net.URI;
 import java.util.stream.Collectors;
@@ -45,6 +46,11 @@ public class ApiExceptionHandler {
     @ExceptionHandler(DataIntegrityViolationException.class)
     ProblemDetail handleDataConflict(DataIntegrityViolationException exception, HttpServletRequest request) {
         return problem(HttpStatus.CONFLICT, "Conflict", "The request conflicts with existing data.", request);
+    }
+
+    @ExceptionHandler(DuplicateWorkplaceCaseSlugException.class)
+    ProblemDetail handleDuplicateCaseSlug(DuplicateWorkplaceCaseSlugException exception, HttpServletRequest request) {
+        return problem(HttpStatus.CONFLICT, "Workplace case slug already exists", exception.getMessage(), request);
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)

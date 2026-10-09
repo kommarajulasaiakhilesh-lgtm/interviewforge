@@ -7,7 +7,7 @@ Lovable UI → Spring MVC API (/api/v1) → feature services → Spring Data JPA
                                                       Flyway migrations
 ```
 
-Code is organized by capability (`questionbank`, `practice`, `user`, `preparation`, `readiness`, `mockinterview`) with controllers, services, repositories, DTOs, and entities kept close to the capability they serve. Spring Security authenticates opaque bearer tokens and protects API routes; admin routes also use method-level role checks. Health probes are sanitized, and the `prod` profile requires explicit database and CORS settings.
+Code is organized by capability (`questionbank`, `practice`, `user`, `preparation`, `readiness`, `mockinterview`, `workplacecase`) with controllers, services, repositories, DTOs, and entities kept close to the capability they serve. Spring Security authenticates opaque bearer tokens and protects API routes; admin routes also use method-level role checks. Health probes are sanitized, and the `prod` profile requires explicit database and CORS settings.
 
 Production topology is intentionally provider-neutral: HTTPS reverse proxy/load balancer → Java API JAR → private PostgreSQL. The current CI workflow packages but does not deploy. See [deployment.md](deployment.md) and [security.md](security.md) for operational requirements and outstanding controls.
 
