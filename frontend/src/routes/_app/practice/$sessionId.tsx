@@ -77,6 +77,7 @@ function QuestionCard({ sessionId, item }: { sessionId: string; item: PracticeQu
         {answered && item.correct !== null && <Badge tone={item.correct ? "success" : "danger"}>{item.correct ? "Correct" : "Incorrect"}</Badge>}
       </div>
       <h3 className="mt-2 text-lg font-bold">{item.title}</h3>
+      {item.scenarioContext && <p className="mt-2 rounded-lg bg-muted p-3 text-sm text-muted-foreground">{item.scenarioContext}</p>}
       <p className="mt-1 whitespace-pre-wrap text-sm">{item.questionText}</p>
 
       {answered ? (
@@ -93,6 +94,7 @@ function QuestionCard({ sessionId, item }: { sessionId: string; item: PracticeQu
                 >
                   <span className="font-semibold">{String.fromCharCode(65 + i)}.</span> {o}
                   {i === item.selectedOptionIndex && <span className="ml-2 text-xs text-muted-foreground">(your answer)</span>}
+                  {item.optionExplanations[i] && <p className="mt-1 text-xs text-muted-foreground">{item.optionExplanations[i]}</p>}
                 </li>
               ))}
             </ul>
@@ -101,6 +103,9 @@ function QuestionCard({ sessionId, item }: { sessionId: string; item: PracticeQu
           )}
           {item.answerText && <div className="rounded-lg border border-primary/30 bg-primary/5 p-3"><p className="text-xs font-semibold text-primary">Reference answer</p><p className="whitespace-pre-wrap">{item.answerText}</p></div>}
           {item.explanation && <div><p className="text-xs font-semibold text-muted-foreground">Explanation</p><p className="whitespace-pre-wrap">{item.explanation}</p></div>}
+          {item.theoryNotes && <div className="rounded-lg border border-border p-3"><p className="text-xs font-semibold text-muted-foreground">Concept to remember</p><p className="mt-1 whitespace-pre-wrap">{item.theoryNotes}</p></div>}
+          {item.workplaceExample && <div><p className="text-xs font-semibold text-muted-foreground">Workplace example</p><p className="whitespace-pre-wrap">{item.workplaceExample}</p></div>}
+          {item.misconceptionLabel && <p className="rounded-lg bg-warning/15 p-3"><span className="font-semibold">Common misconception: </span>{item.misconceptionLabel}</p>}
         </div>
       ) : (
         <form onSubmit={onSubmit} className="mt-4 space-y-3">

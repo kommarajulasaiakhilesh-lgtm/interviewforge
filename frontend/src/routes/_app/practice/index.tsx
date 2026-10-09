@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Card, Empty, ErrorBox, Loading, PageHeader, Pager } from "@/components/kit";
+import { CoreInterviewTopics } from "@/components/CoreInterviewTopics";
 import { PracticeSessionRow, PracticeStarter } from "@/components/practice";
 import { practiceApi } from "@/lib/api/endpoints";
 
@@ -16,6 +17,7 @@ function PracticePage() {
   return (
     <>
       <PageHeader title="Practice" description="Multiple choice is scored instantly. Written answers are saved for your own review." />
+      <CoreInterviewTopics />
       <Card className="mb-8">
         <h2 className="mb-4 text-lg font-bold">New session</h2>
         <PracticeStarter />

@@ -1,13 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
-import { Card, Empty, ErrorBox, Loading, PageHeader, Stat, Badge } from "@/components/kit";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Card, Empty, ErrorBox, Field, Loading, PageHeader, Select, Stat, Badge } from "@/components/kit";
 import { PracticeSessionRow } from "@/components/practice";
-import { mockApi, progressApi } from "@/lib/api/endpoints";
+import { mockApi, preparationGoalApi, prepApi, progressApi, readinessApi } from "@/lib/api/endpoints";
 import { fmtDate, humanize, pct } from "@/lib/format";
 import { useSession } from "@/lib/session";
-import { useEffect, useState } from "react";
-import { getFocusRole, type FocusRole } from "@/lib/prefs";
-import { readinessApi } from "@/lib/api/endpoints";
+import { useEffect } from "react";
+import { clearFocusRole, setFocusRole } from "@/lib/prefs";
 
 export const Route = createFileRoute("/_app/dashboard")({
   head: () => ({ meta: [{ title: "Dashboard — InterviewForge" }, { name: "description", content: "Your practice and progress at a glance." }] }),
@@ -38,7 +37,7 @@ function Dashboard() {
 
       <div className="mt-6 grid gap-6 lg:grid-cols-2">
         <ContinueCard attempts={o?.recentAttempts} loading={overview.isLoading} />
-        <FocusRoleCard />
+        <TargetRoleCard />
       </div>
 
       <div className="mt-8 grid gap-6 lg:grid-cols-2">
@@ -101,29 +100,50 @@ function ContinueCard({ attempts, loading }: { attempts?: { sessionId: string; s
   );
 }
 
-function FocusRoleCard() {
-  const [role, setRole] = useState<FocusRole | null>(null);
-  useEffect(() => setRole(getFocusRole()), []);
-  const plan = useQuery({ queryKey: ["plan", role?.roleId, 3], queryFn: () => readinessApi.plan(role!.roleId, 3), enabled: !!role });
+function TargetRoleCard() {
+  const queryClient = useQueryClient();
+  const roles = useQuery({ queryKey: ["roles", "all"], queryFn: prepApi.allRoles });
+  const goal = useQuery({ queryKey: ["preparationGoal"], queryFn: preparationGoalApi.get });
+  const role = roles.data?.find((candidate) => candidate.id === goal.data?.targetRoleId);
+  const plan = useQuery({ queryKey: ["plan", role?.id, 3], queryFn: () => readinessApi.plan(role!.id, 3), enabled: !!role });
+  const saveRole = useMutation({
+    mutationFn: async (targetRoleId: string | null) => {
+      const current = goal.data ?? await preparationGoalApi.get();
+      return preparationGoalApi.update({ ...current, targetRoleId });
+    },
+    onSuccess: async (saved) => {
+      queryClient.setQueryData(["preparationGoal"], saved);
+      const selectedRole = roles.data?.find((candidate) => candidate.id === saved.targetRoleId);
+      if (selectedRole) setFocusRole({ roleId: selectedRole.id, roleName: selectedRole.name, companyName: selectedRole.companyName });
+      else clearFocusRole();
+      await queryClient.invalidateQueries({ queryKey: ["plan"] });
+    },
+  });
+  useEffect(() => {
+    if (role) setFocusRole({ roleId: role.id, roleName: role.name, companyName: role.companyName });
+    else if (goal.data?.targetRoleId === null) clearFocusRole();
+  }, [role, goal.data?.targetRoleId]);
+
   return (
     <Card>
-      <h2 className="text-lg font-bold">Next step for your role</h2>
-      {!role ? (
-        <Empty title="No role selected">Open a role under <Link to="/companies" className="font-semibold text-primary">Companies</Link> and it will show here.</Empty>
-      ) : (
-        <div className="mt-2">
-          <Link to="/roles/$roleId" params={{ roleId: role.roleId }} className="font-semibold text-primary">{role.roleName} · {role.companyName}</Link>
+      <h2 className="text-lg font-bold">Choose your target role</h2>
+      <p className="mt-1 text-sm text-muted-foreground">Role options are sorted alphabetically and saved to your account.</p>
+      {roles.error ? <div className="mt-3"><ErrorBox error={roles.error} onRetry={() => roles.refetch()} /></div> : roles.isLoading || goal.isLoading ? <Loading /> : roles.data?.length ? <>
+        <Field label="Target role" htmlFor="dashboard-target-role">
+          <Select id="dashboard-target-role" value={goal.data?.targetRoleId ?? ""} disabled={saveRole.isPending} onChange={(event) => saveRole.mutate(event.target.value || null)}>
+            <option value="">Choose a role</option>
+            {roles.data.map((item) => <option key={item.id} value={item.id}>{item.name} · {item.companyName}</option>)}
+          </Select>
+        </Field>
+        {goal.error && <div className="mt-3"><ErrorBox error={goal.error} onRetry={() => goal.refetch()} /></div>}
+        {saveRole.error && <div className="mt-3"><ErrorBox error={saveRole.error} /></div>}
+        {role ? <div className="mt-4">
+          <Link to="/roles/$roleId" params={{ roleId: role.id }} className="font-semibold text-primary">{role.name} · {role.companyName}</Link>
           {plan.isLoading ? <Loading /> : plan.error ? <ErrorBox error={plan.error} onRetry={() => plan.refetch()} /> : plan.data?.tasks.length ? (
-            <ol className="mt-3 space-y-2">
-              {plan.data.tasks.map((t, i) => (
-                <li key={t.topicId} className="flex items-center justify-between rounded-lg border border-border px-3 py-2 text-sm">
-                  <span><span className="font-semibold">{i + 1}. {t.topicName}</span> <span className="text-xs text-muted-foreground">{t.skillName}</span></span>
-                </li>
-              ))}
-            </ol>
+            <ol className="mt-3 space-y-2">{plan.data.tasks.map((task, index) => <li key={task.topicId} className="flex items-center justify-between rounded-lg border border-border px-3 py-2 text-sm"><span><span className="font-semibold">{index + 1}. {task.topicName}</span> <span className="text-xs text-muted-foreground">{task.skillName}</span></span></li>)}</ol>
           ) : <p className="mt-3 text-sm text-muted-foreground">No study tasks right now — try a mock interview for this role.</p>}
-        </div>
-      )}
+        </div> : <p className="mt-3 text-sm text-muted-foreground">Choose a role to see its readiness and personalized next steps.</p>}
+      </> : <Empty title="No active roles available">Browse the <Link to="/companies" className="font-semibold text-primary">Companies</Link> page to find available roles.</Empty>}
     </Card>
   );
 }

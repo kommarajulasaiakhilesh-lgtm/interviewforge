@@ -24,3 +24,11 @@ export function setFocusRole(r: FocusRole) {
     /* ignore */
   }
 }
+
+export function clearFocusRole() {
+  try {
+    window.localStorage.removeItem(KEY);
+  } catch {
+    /* ignore */
+  }
+}

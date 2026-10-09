@@ -110,3 +110,11 @@ Defer AI assistance, leaderboards, and arbitrary submitted-code execution until 
 - Sessions snapshot the full graph and keep owner-only decision history even if the source case is edited or archived later.
 - Rule-based rubric points distinguish strong, viable, and risky choices without claiming to predict hiring outcomes.
 - Flyway schema, API examples, validation behavior, and typed frontend endpoints are documented for Lovable.
+
+## Phase 12 acceptance checklist
+
+- Learners can select a target role from alphabetically sorted active roles on the dashboard; the selection persists through the preparation-goal API.
+- The Companies role list allows learners to set a role as their target role without making an admin-only catalog change.
+- Practice highlights common interview concepts and starts MCQ sessions from published questions for the selected topic.
+- MCQ review presents option-level explanations, theory notes, workplace examples, and misconception guidance when available.
+- Flyway provides an original starter question bank and clearly labeled generic role tracks for a new local installation.

@@ -1,8 +1,8 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useEffect, useState, type FormEvent } from "react";
-import { setFocusRole } from "@/lib/prefs";
+import { useState, type FormEvent } from "react";
 import { Badge, Button, Card, Empty, ErrorBox, Field, Input, Loading, Meter, PageHeader } from "@/components/kit";
+import { TargetRoleButton } from "@/components/TargetRoleButton";
 import { useStartPractice } from "@/components/practice";
 import { mockApi, prepApi, readinessApi } from "@/lib/api/endpoints";
 import { pct } from "@/lib/format";
@@ -20,11 +20,6 @@ function RolePage() {
   const plan = useQuery({ queryKey: ["plan", roleId], queryFn: () => readinessApi.plan(roleId, 10) });
   const startPractice = useStartPractice();
 
-  useEffect(() => {
-    const rr = role.data?.role;
-    if (rr) setFocusRole({ roleId: rr.id, roleName: rr.name, companyName: rr.companyName });
-  }, [role.data]);
-
   if (role.isLoading) return <Loading />;
   if (role.error) return <ErrorBox error={role.error} onRetry={() => role.refetch()} />;
   if (!role.data) return null;
@@ -36,7 +31,7 @@ function RolePage() {
       <PageHeader
         title={r.name}
         description={r.companyName}
-        actions={<Link to="/companies/$companyId" params={{ companyId: r.companyId }} className="text-sm font-semibold text-primary">Back to {r.companyName}</Link>}
+        actions={<div className="flex flex-wrap items-center gap-3"><TargetRoleButton role={r} /><Link to="/companies/$companyId" params={{ companyId: r.companyId }} className="text-sm font-semibold text-primary">Back to {r.companyName}</Link></div>}
       />
       {r.description && <p className="-mt-3 mb-6 max-w-2xl text-muted-foreground">{r.description}</p>}
 

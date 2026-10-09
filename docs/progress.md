@@ -34,19 +34,20 @@
 - Phase 10 was committed and pushed to `main` as `16720f3` (`feat: add adaptive interview coaching loop`). Java source compilation and frontend TypeScript checking passed. The runnable JAR packaging attempt was blocked because Windows denied Maven's rename of the existing JAR under `target`; backend startup and the V8–V10 Flyway application were not verified. The user asked to pause and continue later.
 - Phase 11: role/topic-linked branching workplace cases with admin graph authoring, strict graph validation, evolving decision paths, post-choice feedback for every option, trade-off/misconception explanations, outcome lessons, rubric points, owner-only history, and session graph snapshots. Flyway migration V11 and Lovable API types/endpoints are documented.
 - Phase 11 frontend integration: signed-in learners can browse published cases, start and resume sessions, submit branching choices, review selected and alternative-option coaching, inspect outcomes, and open recent case history.
+- Phase 12: dashboard role selection uses alphabetically sorted roles and persists the chosen target role to the learner profile; Companies role cards can set a target role; Practice includes quick MCQ sessions for core concepts and shows per-option explanations, theory, examples, and misconceptions. Migration V12 seeds seven core topics, 21 original MCQs, and eight generic role tracks with skill mappings.
 
 ## Current status
 
 - The Lovable frontend was pushed under `frontend/` in commit `af36cb3` and fast-forwarded into the local checkout. Its API client uses the backend's documented `/api/v1` endpoints.
 - Local integration is configured with ignored `frontend/.env` pointing to `http://localhost:8080`; backend CORS allows `http://localhost:5173`.
 - Frontend verification: TypeScript check passed, production build passed, and the existing routing test passed. Local HTTP smoke check returned frontend `200`, backend readiness `UP`, and CORS preflight `200`.
-- The backend was stopped at the user's request. Frontend runs from `frontend/` on port 5173 and calls the backend at `http://localhost:8080` using ignored `frontend/.env`.
+- The local backend and PostgreSQL were started for this session; frontend is available on port 5173 and the backend on port 8080. PostgreSQL was started with `pg_ctl` because the Windows service could not be opened from this session.
 - Phase 11 frontend calls use the existing authenticated API client, which attaches the current bearer token and handles unauthorized responses consistently with the rest of the app.
-- Phase 11 Java source compilation and frontend TypeScript checking passed. The production build could not clear the existing OneDrive-synced `frontend/.output` directory (`EPERM`); application startup and Flyway migrations V8–V11 against local PostgreSQL still need confirmation. No tests were added or run.
+- Phase 11 Java source compilation and frontend TypeScript checking passed. Phase 12 JavaScript/TypeScript changes are being checked now. The production build could not clear the existing OneDrive-synced `frontend/.output` directory (`EPERM`). Migration V12 is intended to seed starter roles and MCQs; verify its application on backend restart. No tests were added or run.
 - Phase 9 does not provision cloud resources or perform a deployment; choose a host and complete the listed launch controls when deployment is planned.
 - Voice interview assistant remains a later feature discussion.
 
-## Phase 11 product direction (backend and frontend wired; runtime verification pending)
+## Phase 11 product direction (backend and frontend wired)
 
 The user wants InterviewForge to feel distinct from Google Interview Warmup and Yoodli, with a focus on teaching job-related reasoning rather than centering speech analytics. Phase 11 implements **Branching Workplace Cases**. A learner chooses an action in a realistic case, receives new facts or constraints, makes a follow-up decision, and reviews trade-offs, misconception-specific feedback, all-option explanations, and an outcome lesson.
 

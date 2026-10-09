@@ -17,7 +17,7 @@ function Companies() {
         <Empty title="No companies yet" />
       ) : (
         <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {q.data?.map((c) => (
+          {[...(q.data ?? [])].sort((a, b) => a.name.localeCompare(b.name)).map((c) => (
             <li key={c.id}>
               <Link to="/companies/$companyId" params={{ companyId: c.id }} className="block h-full rounded-xl border border-border bg-card p-5 shadow-card transition hover:-translate-y-0.5 hover:border-primary/50">
                 <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-ink font-display font-bold text-ink-foreground">{c.name.charAt(0)}</div>

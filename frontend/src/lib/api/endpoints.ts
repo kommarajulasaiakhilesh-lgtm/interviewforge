@@ -65,6 +65,14 @@ export const progressApi = {
 export const prepApi = {
   companies: () => api<T.Company[]>("/companies"),
   roles: (companyId: string) => api<T.Role[]>(`/companies/${companyId}/roles`),
+  allRoles: async () => {
+    const companies = await prepApi.companies();
+    const roles = (await Promise.all(companies.map((company) => prepApi.roles(company.id))))
+      .flat()
+      .filter((role) => role.active)
+      .sort((a, b) => a.name.localeCompare(b.name) || a.companyName.localeCompare(b.companyName));
+    return roles;
+  },
   role: (roleId: string) => api<T.RoleDetail>(`/roles/${roleId}`),
   sets: (roleId: string) => api<T.PreparationSetSummary[]>("/preparation-sets", { query: { roleId } }),
   set: (setId: string) => api<T.PreparationSetDetail>(`/preparation-sets/${setId}`),

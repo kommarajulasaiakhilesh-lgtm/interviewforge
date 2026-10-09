@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { Card, Empty, ErrorBox, Loading, PageHeader } from "@/components/kit";
+import { TargetRoleButton } from "@/components/TargetRoleButton";
 import { prepApi } from "@/lib/api/endpoints";
 
 export const Route = createFileRoute("/_app/companies/$companyId")({
@@ -25,15 +26,16 @@ function CompanyRoles() {
         <Empty title="No open roles" />
       ) : (
         <ul className="space-y-3">
-          {roles.data?.map((r) => (
+          {[...(roles.data ?? [])].sort((a, b) => a.name.localeCompare(b.name)).map((r) => (
             <li key={r.id}>
-              <Link to="/roles/$roleId" params={{ roleId: r.id }} className="block">
-                <Card className="hover:border-primary/50">
-                  <h2 className="text-lg font-bold">{r.name}</h2>
+              <Card className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <Link to="/roles/$roleId" params={{ roleId: r.id }} className="text-lg font-bold hover:text-primary">{r.name}</Link>
                   {r.description && <p className="mt-1 text-sm text-muted-foreground">{r.description}</p>}
-                  <p className="mt-3 text-sm font-semibold text-primary">View skills, readiness & study plan →</p>
-                </Card>
-              </Link>
+                  <Link to="/roles/$roleId" params={{ roleId: r.id }} className="mt-2 inline-flex text-sm font-semibold text-primary">View skills, readiness & study plan →</Link>
+                </div>
+                <TargetRoleButton role={r} />
+              </Card>
             </li>
           ))}
         </ul>

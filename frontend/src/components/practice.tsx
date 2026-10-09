@@ -38,7 +38,7 @@ export function PracticeStarter({ initial }: { initial?: Partial<CreatePracticeR
         <Field label="Topic" htmlFor="ps-topic">
           <Select id="ps-topic" value={topicId} onChange={(e) => setTopicId(e.target.value)} disabled={topics.isLoading}>
             <option value="">Any topic</option>
-            {topics.data?.map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}
+            {[...(topics.data ?? [])].sort((a, b) => a.name.localeCompare(b.name)).map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}
           </Select>
         </Field>
         <Field label="Difficulty" htmlFor="ps-diff">
