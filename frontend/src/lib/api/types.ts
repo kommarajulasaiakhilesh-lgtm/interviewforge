@@ -372,6 +372,36 @@ export interface PreparationGoal {
   jobDescription: string | null;
 }
 
+export interface JobRequirementEvidenceMap {
+  roleId: UUID;
+  roleName: string;
+  companyName: string;
+  requirementCount: number;
+  mappedRequirementCount: number;
+  unmappedRequirementCount: number;
+  requirements: {
+    requirementText: string;
+    matchStatus: "MAPPED" | "NOT_MAPPED";
+    skills: {
+      skillId: UUID;
+      skillName: string;
+      roleImportance: number;
+      practiceStatus: "HAS_PRACTICE_HISTORY" | "NO_PRACTICE_HISTORY";
+      topics: {
+        topicId: UUID;
+        topicName: string;
+        relevance: number;
+        publishedQuestionCount: number;
+        questionsAnswered: number;
+        accuracyPercent: number | null;
+        reliableSample: boolean;
+      }[];
+    }[];
+  }[];
+  matchingMethod: string;
+  guidance: string;
+}
+
 // Branching workplace case practice
 export type CaseNodeType = "START" | "DECISION" | "OUTCOME";
 export type DecisionQuality = "STRONG" | "VIABLE" | "RISKY";

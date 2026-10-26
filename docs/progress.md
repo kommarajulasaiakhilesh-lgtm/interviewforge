@@ -35,15 +35,17 @@
 - Phase 11: role/topic-linked branching workplace cases with admin graph authoring, strict graph validation, evolving decision paths, post-choice feedback for every option, trade-off/misconception explanations, outcome lessons, rubric points, owner-only history, and session graph snapshots. Flyway migration V11 and Lovable API types/endpoints are documented.
 - Phase 11 frontend integration: signed-in learners can browse published cases, start and resume sessions, submit branching choices, review selected and alternative-option coaching, inspect outcomes, and open recent case history.
 - Phase 12: dashboard role selection uses alphabetically sorted roles and persists the chosen target role to the learner profile; Companies role cards can set a target role; Practice includes quick MCQ sessions for core concepts and shows per-option explanations, theory, examples, and misconceptions. Migration V12 seeds seven core topics, 21 original MCQs, and eight generic role tracks with skill mappings.
+- Phase 13: authenticated job-requirement evidence map connects the learner's saved job description to active role skills, topics, MCQ availability, and their own practice history. Role details can save the JD and start topic practice from matches. Matching is transparent and deterministic; there is no new schema or external AI dependency.
 
 ## Current status
 
 - The Lovable frontend was pushed under `frontend/` in commit `af36cb3` and fast-forwarded into the local checkout. Its API client uses the backend's documented `/api/v1` endpoints.
 - Local integration is configured with ignored `frontend/.env` pointing to `http://localhost:8080`; backend CORS allows `http://localhost:5173`.
 - Frontend verification: TypeScript check passed, production build passed, and the existing routing test passed. Local HTTP smoke check returned frontend `200`, backend readiness `UP`, and CORS preflight `200`.
-- The local backend and PostgreSQL were started for this session; frontend is available on port 5173 and the backend on port 8080. PostgreSQL was started with `pg_ctl` because the Windows service could not be opened from this session.
+- The frontend, backend, and PostgreSQL were stopped at the user's request on 2026-10-09. Start them manually when the user wants to preview locally.
 - Phase 11 frontend calls use the existing authenticated API client, which attaches the current bearer token and handles unauthorized responses consistently with the rest of the app.
-- Phase 11 Java compilation and Phase 12 frontend TypeScript checking passed; ESLint passed on the new shared frontend components. Maven packaged the backend with tests skipped. Local Flyway V12 applied successfully and seeded 7 topics, 21 published MCQs, and 8 generic roles. The backend health endpoint is `UP`, and the dashboard route returned HTTP 200. The production frontend build previously hit `EPERM` clearing the OneDrive-synced `frontend/.output`; the Vite development server is running. No tests were added or run.
+- Phase 11 Java compilation and Phase 12 frontend TypeScript checking passed; ESLint passed on the new shared frontend components. Maven packaged the backend with tests skipped. Local Flyway V12 applied successfully and seeded 7 topics, 21 published MCQs, and 8 generic roles. The backend health endpoint was `UP`, and the dashboard route returned HTTP 200. The production frontend build had previously hit `EPERM` clearing the OneDrive-synced `frontend/.output`; the current Phase 13 production build passed.
+- Phase 13 verification: `mvn test` passed (2 focused matcher tests), frontend `npm run build` passed, frontend `tsc --noEmit` passed, and `git diff --check` passed. The endpoint and matching privacy/limits are documented. No database migration is required.
 - Phase 9 does not provision cloud resources or perform a deployment; choose a host and complete the listed launch controls when deployment is planned.
 - Voice interview assistant remains a later feature discussion.
 
@@ -61,4 +63,12 @@ Related candidate features to consider when work resumes:
 - Source trust/freshness labels, with clear separation between official, original/editorial, and community-reported questions.
 - Two-way interview preparation for questions the candidate should ask about success measures, team challenges, and early role expectations.
 
-Keep the agreed API-first Java backend and separate Lovable frontend. The first case release uses authored, rule-based paths and does not require paid AI. The next product backlog candidates are the job-requirement evidence map and private personal-experience bank; revisit these after the user reviews Phase 11. Voice AI remains deferred.
+Keep the agreed API-first Java backend and separate Lovable frontend. The first case release uses authored, rule-based paths and does not require paid AI. The job-requirement evidence map is implemented in Phase 13; the private personal-experience bank remains a future candidate. Voice AI remains deferred.
+
+## Phase 13 complete — Job-requirement evidence map
+
+- Added an authenticated endpoint at `GET /api/v1/users/me/preparation/evidence-map` that uses the learner's saved job description and target role.
+- The deterministic matcher extracts short requirement statements and maps curated role skill phrases to active role skills and their topics. Unmatched requirements are returned for manual review.
+- Results include published MCQ availability and the requesting learner's topic attempts and accuracy. The JD is not sent to an AI or external service; practice history is not presented as proof of professional experience.
+- Added a role-page form to save a JD and show its map, with direct practice actions for mapped topics.
+- Added focused matcher tests and API/roadmap documentation. `mvn test`, frontend production build, TypeScript check, and diff whitespace check passed.

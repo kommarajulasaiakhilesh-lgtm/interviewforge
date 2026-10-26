@@ -3,6 +3,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState, type FormEvent } from "react";
 import { Badge, Button, Card, Empty, ErrorBox, Field, Input, Loading, Meter, PageHeader } from "@/components/kit";
 import { TargetRoleButton } from "@/components/TargetRoleButton";
+import { JobRequirementEvidenceCard } from "@/components/JobRequirementEvidenceCard";
 import { useStartPractice } from "@/components/practice";
 import { mockApi, prepApi, readinessApi } from "@/lib/api/endpoints";
 import { pct } from "@/lib/format";
@@ -81,6 +82,8 @@ function RolePage() {
         </Card>
         <MockStarter roleId={roleId} />
       </div>
+
+      <JobRequirementEvidenceCard roleId={roleId} />
 
       <Card className="mt-6">
         <h2 className="text-lg font-bold">Study plan</h2>

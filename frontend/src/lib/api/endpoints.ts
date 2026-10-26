@@ -29,6 +29,7 @@ export const practiceApi = {
 export const preparationGoalApi = {
   get: () => api<T.PreparationGoal>("/users/me/preparation"),
   update: (goal: T.PreparationGoal) => api<T.PreparationGoal>("/users/me/preparation", { method: "PATCH", body: goal }),
+  evidenceMap: () => api<T.JobRequirementEvidenceMap>("/users/me/preparation/evidence-map"),
 };
 
 export const workplaceCaseApi = {

@@ -143,6 +143,9 @@ MCQ attempts create or update a personal spaced-review entry. Wrong answers and 
 
 - `GET /api/v1/users/me/preparation` — read the authenticated user's target role, interview date, weekly study minutes, and optional job description.
 - `PATCH /api/v1/users/me/preparation` — replace those goal fields with `{ "targetRoleId": "<uuid>", "interviewDate": "2026-11-15", "weeklyStudyMinutes": 180, "jobDescription": "..." }`. Fields may be null to clear them. Weekly study time must be 15–1200 minutes; job description is limited to 12,000 characters. The target role must be active. The stored role ID can be used with the Readiness and Study Planning endpoints above. Job description text is stored for the user's preparation workflow and is not sent to an external AI service.
+- `GET /api/v1/users/me/preparation/evidence-map` — analyze the authenticated user's saved job description and target role. Returns extracted requirement statements, deterministic phrase matches to active role skills, mapped topics, published MCQ counts, and only that user's MCQ practice history. A target role and non-empty job description must be saved first. The operation is local and rule-based; it does not call an AI or external service.
+
+The evidence map is a suggestion aid, not a complete job-description parser. It extracts up to 100 distinct sentence-like statements, matches a curated set of skill phrases and aliases, and marks unmatched statements for manual review. Practice history reflects activity in InterviewForge and is not evidence of professional experience. This endpoint does not expose answer keys or other users' data.
 
 ## Progress (Phase 5)
 

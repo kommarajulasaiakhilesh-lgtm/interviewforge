@@ -118,3 +118,12 @@ Defer AI assistance, leaderboards, and arbitrary submitted-code execution until 
 - Practice highlights common interview concepts and starts MCQ sessions from published questions for the selected topic.
 - MCQ review presents option-level explanations, theory notes, workplace examples, and misconception guidance when available.
 - Flyway provides an original starter question bank and clearly labeled generic role tracks for a new local installation.
+
+## Phase 13 acceptance checklist
+
+- Authenticated learners can map their saved job description against their selected target role without sending it to an external service.
+- Requirement statements map transparently to active role skills and topics; unmatched statements remain visible for manual review.
+- Each match shows role importance, published practice-question availability, and only the learner's own MCQ history.
+- The role page lets learners save a job description, review the map, and start practice directly for mapped topics.
+- The API documents deterministic phrase matching and clearly distinguishes practice activity from professional experience evidence.
+- Focused tests cover requirement extraction and phrase matching; frontend and backend verification instructions are documented.
