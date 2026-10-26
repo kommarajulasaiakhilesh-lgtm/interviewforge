@@ -72,3 +72,10 @@ Keep the agreed API-first Java backend and separate Lovable frontend. The first 
 - Results include published MCQ availability and the requesting learner's topic attempts and accuracy. The JD is not sent to an AI or external service; practice history is not presented as proof of professional experience.
 - Added a role-page form to save a JD and show its map, with direct practice actions for mapped topics.
 - Added focused matcher tests and API/roadmap documentation. `mvn test`, frontend production build, TypeScript check, and diff whitespace check passed.
+
+## Pause point — 2026-10-26
+
+- Work is paused at the user's request after Phase 13. The phase is committed and pushed as `24f6f08` on `main`.
+- Frontend, backend, and PostgreSQL are stopped; do not start them until asked to preview or continue locally.
+- The private personal-experience bank remains a possible next feature for later discussion. Voice interview assistance remains deferred.
+- Several unrelated untracked files with `Copy` in their names are present in the workspace. Preserve them and exclude them from project commits unless the user later asks otherwise.
