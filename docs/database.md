@@ -25,3 +25,5 @@ Phase 12 seeds an original starter question bank for seven core interview topics
 Phase 13 adds no schema. It computes the job-requirement evidence map from the learner's saved target role, job description, role-skill/topic catalog, and owner-scoped MCQ history.
 
 Phase 14 adds `experience_stories`, owned by a `user_accounts` row and deleted with that account. It stores private STAR fields, optional context and reflection, source type, and timestamps. `experience_story_skills` maps each story to up to ten active competencies. Deleting a story cascades only its competency links; competency rows are retained.
+
+Phase 15 seeds six market-aligned technical topics and eighteen original MCQs, with answer explanations, theory notes, workplace examples, and misconception guidance. It adds six role skills, maps skills to topics, and provides sixteen alphabetically sortable role tracks under eight company preparation catalogs. Company listings are practice catalogs only, not live vacancies or employer-verified interview questions. No schema changes are made.

@@ -87,3 +87,12 @@ Keep the agreed API-first Java backend and separate Lovable frontend. The first 
 - Building a private, owner-scoped CRUD experience bank with Situation, Task, Actions, Result, optional reflection, source type, and competency links.
 - Adding a signed-in Story bank page with editing, deletion, and reminders not to store confidential employer/customer information.
 - Added Flyway V13 and focused service tests for owner isolation. Maven tests, frontend production build, TypeScript check, and diff whitespace check passed. Migration application awaits the next time local PostgreSQL is started.
+
+## Phase 15 — Market-aligned roles and topic coverage
+
+- Selecting market-aligned topics from the World Economic Forum Future of Jobs Report 2025, U.S. Bureau of Labor Statistics 2024–2034 projections, and India-focused LinkedIn/NASSCOM trend reporting: AI/data, cybersecurity, cloud/platform operations, and software quality.
+- Adding six technical topics and eighteen original MCQs (three per topic) with answer explanations, theory, examples, and misconception guidance.
+- Adding alphabetically sortable role tracks (AI Engineer, Cloud Engineer, Cybersecurity Analyst, Data Analyst, Data Engineer, Data Scientist, DevOps Engineer, Frontend Engineer, Generative AI Engineer, Machine Learning Engineer, MLOps Engineer, Platform Engineer, QA Engineer, Security Engineer, Site Reliability Engineer, Software Engineer) across eight company preparation catalogs.
+- Company-role data is preparation guidance only; it does not claim current openings or verified company questions.
+- Updated Practice topic priorities, role skill mappings, database/roadmap/phase documentation.
+- Build verification: frontend production build and direct TypeScript compiler check passed; Maven Java compilation passed. Packaging is blocked because Windows reports the Maven failed while renaming the existing JAR during repackaging. The Flyway migration has not yet been applied to PostgreSQL, so a running backend will not show the new catalog until it is restarted after migration packaging.

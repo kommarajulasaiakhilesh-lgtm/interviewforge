@@ -136,3 +136,10 @@ Defer AI assistance, leaderboards, and arbitrary submitted-code execution until 
 - The UI provides a STAR editor, a private story list, edit/delete controls, and clear guidance to omit confidential information.
 - Flyway owns the story and competency-link schema; API and privacy behavior are documented.
 - Focused tests cover owner isolation; Maven tests, frontend build, and TypeScript checking pass.
+
+## Phase 15 acceptance checklist
+
+- Active practice topics include AI/ML, generative AI applications, data engineering, cloud/platform engineering, cybersecurity, and quality engineering.
+- Each added topic has at least three original MCQs with correct-answer explanations, theory notes, workplace examples, and misconception guidance.
+- Expanded role tracks are alphabetically listed and mapped to role-relevant skills; company association is labeled as preparation content, not a live job listing or official question bank.
+- Flyway owns repeatable seeded catalog content; API response contracts remain unchanged.

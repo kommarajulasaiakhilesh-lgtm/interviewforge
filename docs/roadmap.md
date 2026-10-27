@@ -16,3 +16,5 @@
 14. Personal experience bank: save private STAR stories from work, projects, education, or volunteering and map them to competencies
 
 Phases 1–14 are complete. Phase 12 adds target-role selection and starter MCQ content for local use. Phase 13 adds the job-requirement evidence map, and Phase 14 adds the private STAR story bank. Voice AI remains deferred as previously agreed; achievements/leaderboards and isolated coding submissions are future extensions.
+
+15. Market-aligned practice catalog: AI and machine learning, generative AI, data engineering, cloud platform engineering, cybersecurity, quality engineering, additional original MCQs, and company-associated role-preparation tracks.

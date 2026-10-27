@@ -10,6 +10,12 @@ const INTERVIEW_TOPIC_PRIORITY = [
   /database|sql|postgres|data modell/i,
   /operating system|concurren|thread/i,
   /network|http|rest api|web service/i,
+  /ai and machine learning|machine learning/i,
+  /generative ai|large language model|llm/i,
+  /data engineering|data warehousing/i,
+  /cloud native|platform engineering/i,
+  /cybersecurity|application security/i,
+  /software testing|quality engineering/i,
   /java|programming|language fundamental/i,
   /behavior|communication|leadership|teamwork/i,
 ];
@@ -28,13 +34,13 @@ export function CoreInterviewTopics() {
   const highlighted = ordered.filter(
     (topic) => topicPriority(topic.name) < INTERVIEW_TOPIC_PRIORITY.length,
   );
-  const suggestions = (highlighted.length ? highlighted : ordered).slice(0, 8);
+  const suggestions = (highlighted.length ? highlighted : ordered).slice(0, 14);
 
   return (
     <Card className="mb-8">
       <h2 className="text-lg font-bold">Core interview topics</h2>
       <p className="mt-1 text-sm text-muted-foreground">
-        Choose a concept to practice its three starter MCQs with explanations and theory notes.
+        Choose a concept to practice its starter MCQs with explanations and theory notes.
       </p>
       {start.error && (
         <div className="mt-4">
@@ -79,8 +85,8 @@ export function CoreInterviewTopics() {
       )}
       {highlighted.length === 0 && suggestions.length > 0 && (
         <p className="mt-3 text-xs text-muted-foreground">
-          These are the currently available topics, ordered alphabetically. Add topics such as data
-          structures, system design, databases, and behavioral interviews to highlight them here.
+          These are the currently available topics, ordered alphabetically. Each topic is available
+          in the new-session selector and question bank filters.
         </p>
       )}
     </Card>
