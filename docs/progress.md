@@ -36,7 +36,7 @@
 - Phase 11 frontend integration: signed-in learners can browse published cases, start and resume sessions, submit branching choices, review selected and alternative-option coaching, inspect outcomes, and open recent case history.
 - Phase 12: dashboard role selection uses alphabetically sorted roles and persists the chosen target role to the learner profile; Companies role cards can set a target role; Practice includes quick MCQ sessions for core concepts and shows per-option explanations, theory, examples, and misconceptions. Migration V12 seeds seven core topics, 21 original MCQs, and eight generic role tracks with skill mappings.
 - Phase 13: authenticated job-requirement evidence map connects the learner's saved job description to active role skills, topics, MCQ availability, and their own practice history. Role details can save the JD and start topic practice from matches. Matching is transparent and deterministic; there is no new schema or external AI dependency.
-- Phase 14: private owner-scoped STAR story bank for work, project, education, volunteer, or other experiences, with optional mapped competencies and reflection. Flyway V13 creates the story and competency-link tables.
+- Phase 14: private owner-scoped STAR story bank for work, project, education, volunteer, or other experiences, with optional mapped competencies and reflection. Flyway V13 creates the story and competency-link tables. Commit `9826935` is pushed to `main`.
 
 ## Current status
 
