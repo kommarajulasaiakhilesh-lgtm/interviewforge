@@ -104,3 +104,17 @@ Keep the agreed API-first Java backend and separate Lovable frontend. The first 
 - The plan offers a harder challenge for one mastered topic when the learner meets the accuracy/sample target.
 - No new schema or external AI provider is required. API documentation describes the new response fields and decision rules.
 - Added focused advisor tests. `mvn -DskipTests test-compile`, frontend TypeScript check, and production build passed. The tests were compiled but not executed in this turn.
+
+## Phase 17 — Written-answer coaching (in progress)
+
+- Adding deterministic answer-writing cues to owner-only mock-interview review: response length, first-person action evidence, outcome language, specific detail, and literal overlap against author-provided rubric lines.
+- Feedback is derived from the already private answer and rubric snapshot. No answer is sent to an external AI service, no separate feedback is stored, and no semantic quality or hiring score is claimed.
+- The interview page will show strengths, next-step suggestions, and rubric self-check notes after an answer is submitted.
+- Added focused coach tests; remaining: compile checks, API documentation review, and phase commit/push.
+
+## Phase 17 — Written-answer coaching
+
+- Added deterministic, answer-specific coaching to owner-only mock-interview details, based on word count and explicit action, result, and concrete-detail cues.
+- Added literal overlap notes for author-provided rubric lines. The UI calls this possible text overlap, not a criterion score.
+- Feedback is derived from the snapshotted rubric and the learner's private answer; there is no separate persistence or external AI request.
+- Added focused coach tests. Maven Java/test-source compilation passed with mvn -DskipTests test-compile; frontend TypeScript check and production build passed. Tests were compiled but not executed in this turn.

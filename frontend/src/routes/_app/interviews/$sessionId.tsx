@@ -31,7 +31,7 @@ function InterviewPage() {
       <Card className="mb-6">
         <div className="flex items-center justify-between gap-3">
           <Badge tone={done ? "success" : "warning"}>{humanize(session.status)}</Badge>
-          <span className="text-sm text-muted-foreground">Answers are not automatically graded — results reflect your own 1–5 self-ratings.</span>
+          <span className="text-sm text-muted-foreground">Writing cues are rule-based, not semantic grading. Skill results use your 1–5 self-ratings.</span>
         </div>
         <div className="mt-3"><Meter value={(session.answeredCount / Math.max(1, session.questionCount)) * 100} label="Interview completion" /></div>
       </Card>
@@ -97,10 +97,13 @@ function MockQuestion({ sessionId, item }: { sessionId: string; item: MockAnswer
       <h3 className="mt-2 text-lg font-bold">{item.title}</h3>
       <p className="mt-1 whitespace-pre-wrap text-sm">{item.questionText}</p>
       {answered ? (
-        <div className="mt-4 rounded-lg bg-muted p-3 text-sm">
-          <p className="text-xs font-semibold text-muted-foreground">Your answer · self-rating {item.selfRating}/5</p>
-          <p className="mt-1 whitespace-pre-wrap">{item.answerText}</p>
-        </div>
+        <>
+          <div className="mt-4 rounded-lg bg-muted p-3 text-sm">
+            <p className="text-xs font-semibold text-muted-foreground">Your answer · self-rating {item.selfRating}/5</p>
+            <p className="mt-1 whitespace-pre-wrap">{item.answerText}</p>
+          </div>
+          {item.feedback && <AnswerCoachPanel feedback={item.feedback} />}
+        </>
       ) : (
         <form onSubmit={onSubmit} className="mt-4 space-y-3">
           <label htmlFor={id} className="text-sm font-semibold">Your answer</label>
@@ -121,5 +124,38 @@ function MockQuestion({ sessionId, item }: { sessionId: string; item: MockAnswer
         </form>
       )}
     </Card>
+  );
+}
+
+function AnswerCoachPanel({ feedback }: { feedback: NonNullable<MockAnswerDetail["feedback"]> }) {
+  return (
+    <section className="mt-4 rounded-lg border border-primary/20 bg-primary/5 p-4" aria-label="Written answer coaching">
+      <h4 className="font-bold">Answer coach</h4>
+      <p className="mt-1 text-xs text-muted-foreground">{feedback.wordCount} words · rule-based feedback, no AI provider</p>
+      <div className="mt-3 grid gap-4 sm:grid-cols-2">
+        <div>
+          <h5 className="text-sm font-semibold">Signals in your answer</h5>
+          <ul className="mt-1 list-disc space-y-1 pl-5 text-sm">{feedback.strengths.map((entry) => <li key={entry}>{entry}</li>)}</ul>
+        </div>
+        <div>
+          <h5 className="text-sm font-semibold">Try improving</h5>
+          <ul className="mt-1 list-disc space-y-1 pl-5 text-sm">{feedback.improvements.map((entry) => <li key={entry}>{entry}</li>)}</ul>
+        </div>
+      </div>
+      {feedback.rubricEvidence.length > 0 && (
+        <div className="mt-4 border-t border-border pt-3">
+          <h5 className="text-sm font-semibold">Rubric self-check</h5>
+          <ul className="mt-2 space-y-2 text-sm">
+            {feedback.rubricEvidence.map((row) => (
+              <li key={row.criterion}>
+                <p className="font-medium">{row.criterion}</p>
+                <p className="text-muted-foreground">{row.coachingNote}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+      <p className="mt-4 text-xs text-muted-foreground">{feedback.methodDisclosure}</p>
+    </section>
   );
 }

@@ -139,7 +139,8 @@ public class MockInterviewService {
     private AnswerDetail answerDetail(MockInterviewItem i) {
         return new AnswerDetail(i.getQuestionId(), i.getPosition(), i.getSkillName(), i.getTitle(), i.getQuestionText(), i.getDifficulty(),
                 i.getSubmittedAnswerText(), i.getSelfRating(), i.getAnsweredAt(), i.getAnsweredAt() == null ? null : i.getEvaluationCriteria(),
-                i.getAnsweredAt() == null ? null : i.getFollowUpPrompt());
+                i.getAnsweredAt() == null ? null : i.getFollowUpPrompt(),
+                i.getAnsweredAt() == null ? null : new WrittenAnswerCoach().coach(i.getSubmittedAnswerText(), i.getEvaluationCriteria()));
     }
     private record SkillTopic(UUID skillId, String skillName, int importance, UUID topicId, int relevance, int weight) { }
     private record QuestionChoice(Question question, SkillTopic mapping) { }

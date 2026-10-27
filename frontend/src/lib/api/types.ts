@@ -336,6 +336,18 @@ export interface MockAnswerDetail extends MockPrompt {
   answeredAt: ISODate | null;
   evaluationCriteria: string | null;
   followUpPrompt: string | null;
+  feedback: MockAnswerFeedback | null;
+}
+export interface MockAnswerFeedback {
+  wordCount: number;
+  strengths: string[];
+  improvements: string[];
+  rubricEvidence: {
+    criterion: string;
+    possibleOverlapTerms: string[];
+    coachingNote: string;
+  }[];
+  methodDisclosure: string;
 }
 export interface MockSkillResult {
   skillId: UUID;
