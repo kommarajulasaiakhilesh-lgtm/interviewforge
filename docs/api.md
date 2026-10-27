@@ -147,6 +147,19 @@ MCQ attempts create or update a personal spaced-review entry. Wrong answers and 
 
 The evidence map is a suggestion aid, not a complete job-description parser. It extracts up to 100 distinct sentence-like statements, matches a curated set of skill phrases and aliases, and marks unmatched statements for manual review. Practice history reflects activity in InterviewForge and is not evidence of professional experience. This endpoint does not expose answer keys or other users' data.
 
+## Personal experience story bank (Phase 14)
+
+All routes require authentication and are scoped to the signed-in learner. Stories are private STAR examples and are never included in public catalogs or another learner's responses.
+
+- `GET /api/v1/experience-stories` — list the caller's saved stories, most recently updated first.
+- `GET /api/v1/experience-stories/{storyId}` — read one of the caller's stories; another user's story returns 404.
+- `POST /api/v1/experience-stories` — create a story using `{ "title": "Improved API latency", "experienceType": "PROJECT", "context": "Course capstone", "situation": "...", "task": "...", "actions": "...", "result": "...", "learning": "...", "skillIds": [] }`.
+- `PUT /api/v1/experience-stories/{storyId}` — replace the caller's story fields and competencies.
+- `DELETE /api/v1/experience-stories/{storyId}` — permanently delete the caller's story.
+- `GET /api/v1/experience-stories/competencies` — list active competencies that can be attached to a story.
+
+`experienceType` is `WORK`, `PROJECT`, `EDUCATION`, `VOLUNTEER`, or `OTHER`. Situation, task, actions, and result are required (up to 6,000 characters each); learning is optional (up to 4,000 characters). A story can map to at most ten active competency IDs. Do not save confidential employer, customer, or personal data. Story text remains in the local InterviewForge database and is not sent to AI or external services.
+
 ## Progress (Phase 5)
 
 All progress endpoints require a bearer token and report only the authenticated user's data.

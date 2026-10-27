@@ -1,6 +1,6 @@
 # InterviewForge
 
-InterviewForge is an adaptive interview preparation platform. This repository contains its Spring Boot API; the user interface will be built separately in Lovable.
+InterviewForge is an adaptive interview preparation platform. This repository contains the Spring Boot API and the Lovable-synced frontend under `frontend/`.
 
 ## Stack
 
@@ -19,6 +19,10 @@ mvn spring-boot:run
 ```
 
 The API listens on `http://localhost:8080`. Its health endpoint is `http://localhost:8080/actuator/health`.
+
+## Verification
+
+Run backend unit tests from the repository root with `mvn test`. Run frontend type checking and a production build from `frontend/` with `node node_modules/typescript/bin/tsc --noEmit` and `npm run build`.
 
 Set `APP_CORS_ALLOWED_ORIGINS` to the exact origin used by the Lovable frontend when you begin that work. Use comma-separated origins if needed.
 

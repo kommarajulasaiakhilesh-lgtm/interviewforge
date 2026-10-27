@@ -402,6 +402,30 @@ export interface JobRequirementEvidenceMap {
   guidance: string;
 }
 
+export type ExperienceType = "WORK" | "PROJECT" | "EDUCATION" | "VOLUNTEER" | "OTHER";
+export interface ExperienceCompetency {
+  id: UUID;
+  name: string;
+  description: string | null;
+}
+export interface ExperienceStoryInput {
+  title: string;
+  experienceType: ExperienceType;
+  context: string | null;
+  situation: string;
+  task: string;
+  actions: string;
+  result: string;
+  learning: string | null;
+  skillIds: UUID[];
+}
+export interface ExperienceStory extends ExperienceStoryInput {
+  id: UUID;
+  competencies: ExperienceCompetency[];
+  createdAt: ISODate;
+  updatedAt: ISODate;
+}
+
 // Branching workplace case practice
 export type CaseNodeType = "START" | "DECISION" | "OUTCOME";
 export type DecisionQuality = "STRONG" | "VIABLE" | "RISKY";

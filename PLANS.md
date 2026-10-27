@@ -127,3 +127,12 @@ Defer AI assistance, leaderboards, and arbitrary submitted-code execution until 
 - The role page lets learners save a job description, review the map, and start practice directly for mapped topics.
 - The API documents deterministic phrase matching and clearly distinguishes practice activity from professional experience evidence.
 - Focused tests cover requirement extraction and phrase matching; frontend and backend verification instructions are documented.
+
+## Phase 14 acceptance checklist
+
+- A learner can create, list, read, edit, and delete private experience stories, with every read/write scoped to the authenticated owner.
+- Each story records experience type, optional context, Situation, Task, Actions, Result, and optional reflection.
+- Learners can map a story to up to ten active competencies; IDs are validated and duplicate competency links are rejected.
+- The UI provides a STAR editor, a private story list, edit/delete controls, and clear guidance to omit confidential information.
+- Flyway owns the story and competency-link schema; API and privacy behavior are documented.
+- Focused tests cover owner isolation; Maven tests, frontend build, and TypeScript checking pass.

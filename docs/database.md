@@ -21,3 +21,7 @@ Phase 10 adds `user_question_reviews`, keyed by user and question, to schedule s
 Phase 11 adds `workplace_cases`, ordered `workplace_case_nodes`, and `workplace_case_choices` to author a validated acyclic decision graph. Each edge has curated decision-quality, explanation, trade-off, and misconception metadata. `workplace_case_sessions` stores an immutable JSONB snapshot of the graph and the current step; `workplace_case_decisions` stores the selected choice and the feedback snapshot for owner-only history. Case authoring replaces a graph transactionally, and archive is soft-delete so existing sessions remain reviewable.
 
 Phase 12 seeds an original starter question bank for seven core interview topics, with three published MCQs per topic and option-level teaching. It also adds a clearly labeled generic role library with eight common role tracks and broad skill/topic mappings so a fresh installation can demonstrate role selection, readiness, and targeted practice. The seeded roles are not employer-specific job postings.
+
+Phase 13 adds no schema. It computes the job-requirement evidence map from the learner's saved target role, job description, role-skill/topic catalog, and owner-scoped MCQ history.
+
+Phase 14 adds `experience_stories`, owned by a `user_accounts` row and deleted with that account. It stores private STAR fields, optional context and reflection, source type, and timestamps. `experience_story_skills` maps each story to up to ten active competencies. Deleting a story cascades only its competency links; competency rows are retained.

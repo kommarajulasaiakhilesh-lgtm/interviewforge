@@ -32,6 +32,15 @@ export const preparationGoalApi = {
   evidenceMap: () => api<T.JobRequirementEvidenceMap>("/users/me/preparation/evidence-map"),
 };
 
+export const experienceStoryApi = {
+  list: () => api<T.ExperienceStory[]>("/experience-stories"),
+  get: (storyId: string) => api<T.ExperienceStory>(`/experience-stories/${storyId}`),
+  competencies: () => api<T.ExperienceCompetency[]>("/experience-stories/competencies"),
+  create: (story: T.ExperienceStoryInput) => api<T.ExperienceStory>("/experience-stories", { method: "POST", body: story }),
+  update: (storyId: string, story: T.ExperienceStoryInput) => api<T.ExperienceStory>(`/experience-stories/${storyId}`, { method: "PUT", body: story }),
+  delete: (storyId: string) => api<void>(`/experience-stories/${storyId}`, { method: "DELETE" }),
+};
+
 export const workplaceCaseApi = {
   browse: (filters: { roleId?: string; topicId?: string; difficulty?: T.Difficulty; page?: number; size?: number } = {}) =>
     api<T.Page<T.WorkplaceCaseSummary>>("/workplace-cases", { query: { ...filters } }),

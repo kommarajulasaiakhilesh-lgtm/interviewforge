@@ -14,6 +14,7 @@ import { Route as AppRouteRouteImport } from './routes/_app/route'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as AppDashboardRouteImport } from './routes/_app/dashboard'
+import { Route as AppExperiencesRouteImport } from './routes/_app/experiences'
 import { Route as AppProfileRouteImport } from './routes/_app/profile'
 import { Route as AppProgressRouteImport } from './routes/_app/progress'
 import { Route as AppQuestionsRouteImport } from './routes/_app/questions'
@@ -50,6 +51,11 @@ const RegisterRoute = RegisterRouteImport.update({
 const AppDashboardRoute = AppDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppExperiencesRoute = AppExperiencesRouteImport.update({
+  id: '/experiences',
+  path: '/experiences',
   getParentRoute: () => AppRouteRoute,
 } as any)
 const AppProfileRoute = AppProfileRouteImport.update({
@@ -124,6 +130,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
   '/dashboard': typeof AppDashboardRoute
+  '/experiences': typeof AppExperiencesRoute
   '/profile': typeof AppProfileRoute
   '/progress': typeof AppProgressRoute
   '/questions': typeof AppQuestionsRoute
@@ -143,6 +150,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
   '/dashboard': typeof AppDashboardRoute
+  '/experiences': typeof AppExperiencesRoute
   '/profile': typeof AppProfileRoute
   '/progress': typeof AppProgressRoute
   '/questions': typeof AppQuestionsRoute
@@ -164,6 +172,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
   '/_app/dashboard': typeof AppDashboardRoute
+  '/_app/experiences': typeof AppExperiencesRoute
   '/_app/profile': typeof AppProfileRoute
   '/_app/progress': typeof AppProgressRoute
   '/_app/questions': typeof AppQuestionsRoute
@@ -185,6 +194,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/register'
     | '/dashboard'
+    | '/experiences'
     | '/profile'
     | '/progress'
     | '/questions'
@@ -204,6 +214,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/register'
     | '/dashboard'
+    | '/experiences'
     | '/profile'
     | '/progress'
     | '/questions'
@@ -224,6 +235,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/register'
     | '/_app/dashboard'
+    | '/_app/experiences'
     | '/_app/profile'
     | '/_app/progress'
     | '/_app/questions'
@@ -281,6 +293,13 @@ declare module '@tanstack/react-router' {
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof AppDashboardRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/_app/experiences': {
+      id: '/_app/experiences'
+      path: '/experiences'
+      fullPath: '/experiences'
+      preLoaderRoute: typeof AppExperiencesRouteImport
       parentRoute: typeof AppRouteRoute
     }
     '/_app/profile': {
@@ -379,6 +398,7 @@ declare module '@tanstack/react-router' {
 
 interface AppRouteRouteChildren {
   AppDashboardRoute: typeof AppDashboardRoute
+  AppExperiencesRoute: typeof AppExperiencesRoute
   AppProfileRoute: typeof AppProfileRoute
   AppProgressRoute: typeof AppProgressRoute
   AppQuestionsRoute: typeof AppQuestionsRoute
@@ -396,6 +416,7 @@ interface AppRouteRouteChildren {
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppDashboardRoute: AppDashboardRoute,
+  AppExperiencesRoute: AppExperiencesRoute,
   AppProfileRoute: AppProfileRoute,
   AppProgressRoute: AppProgressRoute,
   AppQuestionsRoute: AppQuestionsRoute,

@@ -1,7 +1,7 @@
 import { createFileRoute, Link, Outlet, redirect, useNavigate, useRouter } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
-import { BarChart3, Briefcase, BookOpen, LayoutDashboard, LogOut, MessagesSquare, Target, User, Workflow } from "lucide-react";
+import { BarChart3, Briefcase, BookOpen, LayoutDashboard, LogOut, MessagesSquare, Target, User, Workflow, NotebookPen } from "lucide-react";
 import { getSession, setSession, useSession } from "@/lib/session";
 import { setUnauthorizedHandler } from "@/lib/api/client";
 import { authApi } from "@/lib/api/endpoints";
@@ -22,6 +22,7 @@ const nav = [
   { to: "/progress", label: "Progress", icon: BarChart3 },
   { to: "/companies", label: "Companies", icon: Briefcase },
   { to: "/interviews", label: "Interviews", icon: MessagesSquare },
+  { to: "/experiences", label: "Story bank", icon: NotebookPen },
   { to: "/profile", label: "Profile", icon: User },
 ] as const;
 

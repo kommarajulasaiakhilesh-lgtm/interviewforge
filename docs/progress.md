@@ -36,6 +36,7 @@
 - Phase 11 frontend integration: signed-in learners can browse published cases, start and resume sessions, submit branching choices, review selected and alternative-option coaching, inspect outcomes, and open recent case history.
 - Phase 12: dashboard role selection uses alphabetically sorted roles and persists the chosen target role to the learner profile; Companies role cards can set a target role; Practice includes quick MCQ sessions for core concepts and shows per-option explanations, theory, examples, and misconceptions. Migration V12 seeds seven core topics, 21 original MCQs, and eight generic role tracks with skill mappings.
 - Phase 13: authenticated job-requirement evidence map connects the learner's saved job description to active role skills, topics, MCQ availability, and their own practice history. Role details can save the JD and start topic practice from matches. Matching is transparent and deterministic; there is no new schema or external AI dependency.
+- Phase 14: private owner-scoped STAR story bank for work, project, education, volunteer, or other experiences, with optional mapped competencies and reflection. Flyway V13 creates the story and competency-link tables.
 
 ## Current status
 
@@ -46,6 +47,7 @@
 - Phase 11 frontend calls use the existing authenticated API client, which attaches the current bearer token and handles unauthorized responses consistently with the rest of the app.
 - Phase 11 Java compilation and Phase 12 frontend TypeScript checking passed; ESLint passed on the new shared frontend components. Maven packaged the backend with tests skipped. Local Flyway V12 applied successfully and seeded 7 topics, 21 published MCQs, and 8 generic roles. The backend health endpoint was `UP`, and the dashboard route returned HTTP 200. The production frontend build had previously hit `EPERM` clearing the OneDrive-synced `frontend/.output`; the current Phase 13 production build passed.
 - Phase 13 verification: `mvn test` passed (2 focused matcher tests), frontend `npm run build` passed, frontend `tsc --noEmit` passed, and `git diff --check` passed. The endpoint and matching privacy/limits are documented. No database migration is required.
+- Phase 14 verification: `mvn test` passed (4 backend tests total), frontend `npm test` passed (2 routing tests), frontend `npm run build` passed, frontend `tsc --noEmit` passed, and `git diff --check` passed. PostgreSQL remained stopped, so Flyway V13 has not yet been applied to the local database.
 - Phase 9 does not provision cloud resources or perform a deployment; choose a host and complete the listed launch controls when deployment is planned.
 - Voice interview assistant remains a later feature discussion.
 
@@ -53,17 +55,17 @@
 
 The user wants InterviewForge to feel distinct from Google Interview Warmup and Yoodli, with a focus on teaching job-related reasoning rather than centering speech analytics. Phase 11 implements **Branching Workplace Cases**. A learner chooses an action in a realistic case, receives new facts or constraints, makes a follow-up decision, and reviews trade-offs, misconception-specific feedback, all-option explanations, and an outcome lesson.
 
-Related candidate features to consider when work resumes:
+Related candidate features to consider for future phases:
 
 - Explain why each wrong choice seemed plausible, identify its misconception, and show when that choice could be appropriate.
 - Constraint-change drills that vary scale, cost, security, team size, or time limits to test transfer beyond memorized answers.
-- A traceable job-requirement evidence map connecting job-description requirements to skills, questions, and demonstrated readiness.
-- A private personal-experience bank mapping project/work/school examples to competencies and STAR structure.
+- A traceable job-requirement evidence map connecting job-description requirements to skills, questions, and demonstrated readiness (implemented in Phase 13).
+- A private personal-experience bank mapping project/work/school examples to competencies and STAR structure (implemented in Phase 14).
 - A decision trade-off journal that captures the learner's assumptions, priorities, and evidence that would change their decision.
 - Source trust/freshness labels, with clear separation between official, original/editorial, and community-reported questions.
 - Two-way interview preparation for questions the candidate should ask about success measures, team challenges, and early role expectations.
 
-Keep the agreed API-first Java backend and separate Lovable frontend. The first case release uses authored, rule-based paths and does not require paid AI. The job-requirement evidence map is implemented in Phase 13; the private personal-experience bank remains a future candidate. Voice AI remains deferred.
+Keep the agreed API-first Java backend and separate Lovable frontend. The first case release uses authored, rule-based paths and does not require paid AI. Phases 13 and 14 implement the job-requirement evidence map and private personal-experience bank. Voice AI remains deferred.
 
 ## Phase 13 complete — Job-requirement evidence map
 
@@ -73,9 +75,15 @@ Keep the agreed API-first Java backend and separate Lovable frontend. The first 
 - Added a role-page form to save a JD and show its map, with direct practice actions for mapped topics.
 - Added focused matcher tests and API/roadmap documentation. `mvn test`, frontend production build, TypeScript check, and diff whitespace check passed.
 
-## Pause point — 2026-10-26
+## Pause point — 2026-10-26 (resumed 2026-10-27)
 
-- Work is paused at the user's request after Phase 13. The phase is committed and pushed as `24f6f08` on `main`.
-- Frontend, backend, and PostgreSQL are stopped; do not start them until asked to preview or continue locally.
-- The private personal-experience bank remains a possible next feature for later discussion. Voice interview assistance remains deferred.
+- Phase 13 is committed and pushed as `24f6f08` on `main`; the pause-note update is `724d16f`.
+- Frontend, backend, and PostgreSQL were stopped at the last pause. They have not been started during the current implementation work.
+- Voice interview assistance remains deferred.
 - Several unrelated untracked files with `Copy` in their names are present in the workspace. Preserve them and exclude them from project commits unless the user later asks otherwise.
+
+## Phase 14 complete — Personal experience story bank
+
+- Building a private, owner-scoped CRUD experience bank with Situation, Task, Actions, Result, optional reflection, source type, and competency links.
+- Adding a signed-in Story bank page with editing, deletion, and reminders not to store confidential employer/customer information.
+- Added Flyway V13 and focused service tests for owner isolation. Maven tests, frontend production build, TypeScript check, and diff whitespace check passed. Migration application awaits the next time local PostgreSQL is started.
