@@ -15,6 +15,15 @@
 13. Job-requirement evidence map: connect saved job-description statements to role skills, practice topics, and learner-owned MCQ history
 14. Personal experience bank: save private STAR stories from work, projects, education, or volunteering and map them to competencies
 
-Phases 1–14 are complete. Phase 12 adds target-role selection and starter MCQ content for local use. Phase 13 adds the job-requirement evidence map, and Phase 14 adds the private STAR story bank. Voice AI remains deferred as previously agreed; achievements/leaderboards and isolated coding submissions are future extensions.
+Phases 1–15 have implementation commits. Phase 15's V14 migration still needs application to the local PostgreSQL database. The next add-on phases are:
+
+16. Adaptive practice planning: choose a difficulty from topic history, fit session size to available questions, and give an advanced learner a harder challenge (in progress).
+17. Written-answer coaching: structured, transparent feedback from mock-interview rubrics, with an optional disclosed AI provider and a no-provider path.
+18. Sourced job and company guidance: job links, freshness dates, clear separation of employer-authored guidance from original practice content, and no unsupported vacancy claims.
+19. Voice mock interviews: spoken questions and follow-ups, transcript review, text fallback, and explicit audio privacy controls.
+20. Isolated coding practice: timed exercises and test results using a restricted execution service outside the main API.
+21. Goals and reminders: weekly goals, owner-scoped milestones, and opt-in in-app reminders.
+
+These are separate phases so provider costs, privacy, and sandbox requirements can be evaluated before those integrations are enabled.
 
 15. Market-aligned practice catalog: AI and machine learning, generative AI, data engineering, cloud platform engineering, cybersecurity, quality engineering, additional original MCQs, and company-associated role-preparation tracks.

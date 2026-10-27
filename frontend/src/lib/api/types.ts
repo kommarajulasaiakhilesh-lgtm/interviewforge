@@ -282,10 +282,12 @@ export interface StudyTask {
   combinedWeight: number;
   questionsAnswered: number;
   currentAccuracyPercent: number | null;
+  recommendedDifficulty: "EASY" | "MEDIUM" | "HARD" | null;
   recommendedQuestions: number;
   estimatedMinutes: number;
   priority: number;
   reasons: string[];
+  adaptationReason: string;
 }
 export interface StudyPlan {
   roleId: UUID;

@@ -12,7 +12,7 @@ Build one reviewable vertical slice at a time. Each phase should define its API 
 8. Mock interviews: sessions, answers and skill-area results.
 9. Production polish: security review, deployment, monitoring and integration fixes.
 
-Defer AI assistance, leaderboards, and arbitrary submitted-code execution until the core platform is stable. Never execute user code inside the main API process.
+Phases 16–21 extend the stable core with adaptive practice, written-answer coaching, sourced job/company guidance, voice interviews, isolated coding exercises, and learner reminders. Keep external-provider usage optional, disclose data sent to providers, and never execute user code inside the main API process.
 
 ## Phase 1 acceptance checklist
 
@@ -143,3 +143,46 @@ Defer AI assistance, leaderboards, and arbitrary submitted-code execution until 
 - Each added topic has at least three original MCQs with correct-answer explanations, theory notes, workplace examples, and misconception guidance.
 - Expanded role tracks are alphabetically listed and mapped to role-relevant skills; company association is labeled as preparation content, not a live job listing or official question bank.
 - Flyway owns repeatable seeded catalog content; API response contracts remain unchanged.
+
+## Phase 16 acceptance checklist — Adaptive practice planning
+
+- The role study plan recommends a question difficulty from the learner's topic attempt count and accuracy using an explainable rule.
+- Recommendations use the actual published MCQ inventory, fall back to an available difficulty when needed, and never request more questions than exist.
+- When all mapped topics meet the target with a reliable sample, the plan offers one higher-difficulty challenge when content exists.
+- The frontend displays the difficulty and rationale and starts a matching session; no content or history is shared with an AI provider.
+- Focused advisor tests cover beginner, struggling, advancing, fallback, and empty-content cases. API behavior is documented.
+
+## Phase 17 acceptance checklist — Written-answer coaching
+
+- A learner receives structured rubric feedback on a written mock answer, including evidence, completeness, clarity, and actionable next steps.
+- Feedback distinguishes rubric evidence from inferred suggestions and does not claim to predict hiring outcomes.
+- Any external model integration is optional, uses server-side secret configuration, discloses what answer data is sent, and has a no-provider fallback.
+- Owner-only answers and feedback remain private; response limits and abuse controls are documented.
+
+## Phase 18 acceptance checklist — Sourced job and company guidance
+
+- Learners can attach a current job posting link or enter its requirements; imported data retains source URL and retrieval/verification date.
+- Company role tracks, employer-authored hiring guidance, and InterviewForge original questions have distinct provenance labels.
+- Stale or inaccessible data is visibly marked; the product does not imply an open vacancy or employer endorsement without evidence.
+- Provider/API terms, refresh policy, attribution, and user privacy behavior are documented.
+
+## Phase 19 acceptance checklist — Voice mock interviews
+
+- Learners can conduct a spoken interview with a text fallback and review their transcript before saving or sharing it with any provider.
+- The interviewer asks role-relevant questions and follow-ups; transcript, recording, retention, and deletion behavior are explicit.
+- Browser speech capability and external AI provider availability are handled gracefully; no audio is retained by default without consent.
+- Voice feedback is clearly a coaching aid, not an employment prediction.
+
+## Phase 20 acceptance checklist — Isolated coding practice
+
+- Learners solve timed role/topic coding prompts with examples, hidden tests, and explanatory review.
+- Submitted code runs only in a dedicated, restricted execution environment isolated from the main API and database credentials.
+- Time, memory, network, filesystem, concurrency, and retention limits are enforced and documented before enabling execution.
+- A non-execution editor/review mode remains available when the runner is unavailable.
+
+## Phase 21 acceptance checklist — Goals and reminders
+
+- Learners can set a weekly practice goal and optional interview-date reminders, control notification preferences, and disable reminders.
+- Progress milestones are calculated from owner-scoped history and explain their criteria.
+- In-app reminders work without a paid email/SMS provider; external delivery is an optional later integration.
+- Time zone, quiet-hour, deletion, and notification privacy behavior are documented.

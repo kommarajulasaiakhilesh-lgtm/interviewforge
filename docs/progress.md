@@ -95,4 +95,12 @@ Keep the agreed API-first Java backend and separate Lovable frontend. The first 
 - Adding alphabetically sortable role tracks (AI Engineer, Cloud Engineer, Cybersecurity Analyst, Data Analyst, Data Engineer, Data Scientist, DevOps Engineer, Frontend Engineer, Generative AI Engineer, Machine Learning Engineer, MLOps Engineer, Platform Engineer, QA Engineer, Security Engineer, Site Reliability Engineer, Software Engineer) across eight company preparation catalogs.
 - Company-role data is preparation guidance only; it does not claim current openings or verified company questions.
 - Updated Practice topic priorities, role skill mappings, database/roadmap/phase documentation.
-- Build verification: frontend production build and direct TypeScript compiler check passed; Maven Java compilation passed. Packaging is blocked because Windows reports the Maven failed while renaming the existing JAR during repackaging. The Flyway migration has not yet been applied to PostgreSQL, so a running backend will not show the new catalog until it is restarted after migration packaging.
+- Build verification: frontend production build and direct TypeScript compiler check passed; Maven Java compilation passed. Packaging could not complete because the Spring Boot Maven plugin failed while renaming the existing JAR during repackaging. The Flyway migration has not yet been applied to PostgreSQL, so a running backend will not show the new catalog until it is restarted after migration packaging.
+
+## Phase 16 — Adaptive practice planning
+
+- Extended the role study plan to select Easy, Medium, or Hard from the learner's topic attempt history and accuracy using a transparent rule.
+- Matched recommendations to published MCQs actually available at each difficulty and capped session size to the inventory; the role page shows the rationale.
+- The plan offers a harder challenge for one mastered topic when the learner meets the accuracy/sample target.
+- No new schema or external AI provider is required. API documentation describes the new response fields and decision rules.
+- Added focused advisor tests. `mvn -DskipTests test-compile`, frontend TypeScript check, and production build passed. The tests were compiled but not executed in this turn.

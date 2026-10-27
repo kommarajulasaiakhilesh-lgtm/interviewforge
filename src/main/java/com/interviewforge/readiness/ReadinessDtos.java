@@ -3,6 +3,7 @@ package com.interviewforge.readiness;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
+import com.interviewforge.questionbank.Difficulty;
 
 public final class ReadinessDtos {
     private ReadinessDtos() { }
@@ -24,6 +25,6 @@ public final class ReadinessDtos {
     public record StudyTask(UUID topicId, String topicName, String skillName,
             int importance, int relevance, BigDecimal combinedWeight,
             long questionsAnswered, BigDecimal currentAccuracyPercent,
-            int recommendedQuestions, int estimatedMinutes, int priority,
-            List<String> reasons) { }
+            Difficulty recommendedDifficulty, int recommendedQuestions, int estimatedMinutes,
+            int priority, List<String> reasons, String adaptationReason) { }
 }

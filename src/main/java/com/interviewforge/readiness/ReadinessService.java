@@ -11,6 +11,8 @@ import java.math.RoundingMode;
 import java.util.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.jdbc.core.JdbcTemplate;
+import com.interviewforge.questionbank.Difficulty;
 
 import static com.interviewforge.readiness.ReadinessDtos.*;
 
@@ -26,12 +28,13 @@ public class ReadinessService {
     private final SkillRepository skills;
     private final TopicRepository topics;
     private final ProgressRepository progress;
+    private final JdbcTemplate jdbc;
 
     public ReadinessService(CompanyRoleRepository roles, CompanyRepository companies,
             RoleSkillMappingRepository roleSkills, SkillTopicMappingRepository skillTopics,
-            SkillRepository skills, TopicRepository topics, ProgressRepository progress) {
+            SkillRepository skills, TopicRepository topics, ProgressRepository progress, JdbcTemplate jdbc) {
         this.roles = roles; this.companies = companies; this.roleSkills = roleSkills;
-        this.skillTopics = skillTopics; this.skills = skills; this.topics = topics; this.progress = progress;
+        this.skillTopics = skillTopics; this.skills = skills; this.topics = topics; this.progress = progress; this.jdbc = jdbc;
     }
 
     public ReadinessAssessment assessment(UUID userId, UUID roleId) {
@@ -65,10 +68,34 @@ public class ReadinessService {
         Map<UUID, TopicRow> historyByTopic = new HashMap<>();
         history.forEach(row -> historyByTopic.put(row.getTopicId(), row));
         RoleData role = roleData(roleId, historyByTopic);
-        List<StudyTask> tasks = role.topics().stream().filter(t -> t.answered() < MINIMUM_ATTEMPTS || t.accuracy().compareTo(BigDecimal.valueOf(TARGET_ACCURACY)) < 0)
-                .map(this::task).sorted(Comparator.comparingInt(StudyTask::priority).reversed()
+        Map<UUID, Map<Difficulty, Long>> available = availableQuestionsByTopic();
+        List<TopicData> studyTopics = role.topics().stream()
+                .filter(t -> t.answered() < MINIMUM_ATTEMPTS || t.accuracy().compareTo(BigDecimal.valueOf(TARGET_ACCURACY)) < 0)
+                .toList();
+        if (studyTopics.isEmpty()) {
+            studyTopics = role.topics().stream()
+                    .filter(t -> t.answered() >= MINIMUM_ATTEMPTS && t.accuracy().compareTo(BigDecimal.valueOf(TARGET_ACCURACY)) >= 0)
+                    .sorted(Comparator.comparing(TopicData::weight).reversed().thenComparing(TopicData::name, String.CASE_INSENSITIVE_ORDER))
+                    .limit(1).toList();
+        }
+        List<StudyTask> tasks = studyTopics.stream()
+                .map(t -> task(t, available.getOrDefault(t.id(), Map.of()))).sorted(Comparator.comparingInt(StudyTask::priority).reversed()
                         .thenComparing(StudyTask::topicName, String.CASE_INSENSITIVE_ORDER)).limit(maxTasks).toList();
         return new StudyPlan(role.id(), role.name(), TARGET_ACCURACY, MINIMUM_ATTEMPTS, tasks);
+    }
+
+    private Map<UUID, Map<Difficulty, Long>> availableQuestionsByTopic() {
+        Map<UUID, Map<Difficulty, Long>> result = new HashMap<>();
+        jdbc.query("""
+                SELECT q.topic_id, q.difficulty, COUNT(*) AS question_count
+                FROM questions q JOIN topics t ON t.id=q.topic_id
+                WHERE q.published AND NOT q.archived AND q.type='MCQ' AND t.active
+                GROUP BY q.topic_id, q.difficulty
+                """, rs -> {
+                    result.computeIfAbsent(rs.getObject("topic_id", UUID.class), ignored -> new EnumMap<>(Difficulty.class))
+                            .put(Difficulty.valueOf(rs.getString("difficulty")), rs.getLong("question_count"));
+                });
+        return result;
     }
 
     private RoleData roleData(UUID roleId, Map<UUID, TopicRow> history) {
@@ -105,16 +132,21 @@ public class ReadinessService {
                 t.answered() == 0 ? null : t.accuracy(), t.answered() >= MINIMUM_ATTEMPTS);
     }
 
-    private StudyTask task(TopicData t) {
+    private StudyTask task(TopicData t, Map<Difficulty, Long> available) {
         List<String> reasons = new ArrayList<>();
         if (t.answered() == 0) reasons.add("No MCQ attempts yet.");
         else if (t.answered() < MINIMUM_ATTEMPTS) reasons.add("Fewer than 5 MCQ attempts; accuracy is an early estimate.");
         if (t.answered() >= MINIMUM_ATTEMPTS && t.accuracy().compareTo(BigDecimal.valueOf(TARGET_ACCURACY)) < 0)
             reasons.add("Accuracy is below the 80% target.");
+        if (t.answered() >= MINIMUM_ATTEMPTS && t.accuracy().compareTo(BigDecimal.valueOf(TARGET_ACCURACY)) >= 0)
+            reasons.add("This topic meets the target; a harder practice set is offered as a next challenge.");
         BigDecimal normalizedGap = BigDecimal.valueOf(100).subtract(t.accuracy()).max(BigDecimal.ZERO);
         int priority = t.weight().multiply(normalizedGap).setScale(0, RoundingMode.HALF_UP).intValue();
+        AdaptivePracticeAdvisor.Recommendation recommendation =
+                AdaptivePracticeAdvisor.recommend(t.answered(), t.accuracy(), available);
         return new StudyTask(t.id(), t.name(), t.skillName(), t.importance(), t.relevance(), t.weight(),
-                t.answered(), t.answered() == 0 ? null : t.accuracy(), 5, 30, priority, reasons);
+                t.answered(), t.answered() == 0 ? null : t.accuracy(), recommendation.difficulty(),
+                recommendation.questions(), recommendation.estimatedMinutes(), priority, reasons, recommendation.reason());
     }
 
     private record RoleData(UUID id, String name, List<SkillData> skills, List<TopicData> topics) { }

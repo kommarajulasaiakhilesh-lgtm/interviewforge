@@ -88,18 +88,19 @@ function RolePage() {
       <Card className="mt-6">
         <h2 className="text-lg font-bold">Study plan</h2>
         {plan.isLoading ? <Loading /> : plan.error ? <ErrorBox error={plan.error} /> : plan.data?.tasks.length === 0 ? (
-          <div className="mt-3"><Empty title="Nothing to study right now">You're at or above {plan.data.targetAccuracyPercent}% on every mapped topic.</Empty></div>
+          <div className="mt-3"><Empty title="No practice tasks available">All mapped topics meet the target, or there are no published questions for this role yet.</Empty></div>
         ) : (
           <ol className="mt-4 space-y-3">
             {plan.data?.tasks.map((t, i) => (
               <li key={t.topicId} className="flex flex-col gap-3 rounded-lg border border-border p-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                   <p className="font-semibold"><span className="mr-2 font-display text-primary">{i + 1}.</span>{t.topicName} <span className="text-xs font-normal text-muted-foreground">· {t.skillName}</span></p>
-                  <p className="text-xs text-muted-foreground">Priority {t.priority} · {t.questionsAnswered} answered · accuracy {pct(t.currentAccuracyPercent)} · ~{t.estimatedMinutes} min</p>
+                  <p className="text-xs text-muted-foreground">Priority {t.priority} · {t.questionsAnswered} answered · accuracy {pct(t.currentAccuracyPercent)} · {t.recommendedDifficulty ? t.recommendedDifficulty.toLowerCase() + " level · " : ""}~{t.estimatedMinutes} min</p>
                   <ul className="mt-1 list-disc pl-5 text-sm text-muted-foreground">{t.reasons.map((x) => <li key={x}>{x}</li>)}</ul>
+                  <p className="mt-1 text-xs text-muted-foreground">{t.adaptationReason}</p>
                 </div>
-                <Button size="sm" variant="accent" disabled={startPractice.isPending} onClick={() => startPractice.mutate({ topicId: t.topicId, type: "MCQ", questionCount: t.recommendedQuestions })}>
-                  Practice {t.recommendedQuestions} MCQs
+                <Button size="sm" variant="accent" disabled={startPractice.isPending || t.recommendedQuestions === 0} onClick={() => startPractice.mutate({ topicId: t.topicId, difficulty: t.recommendedDifficulty ?? undefined, type: "MCQ", questionCount: t.recommendedQuestions })}>
+                  {t.recommendedQuestions > 0 ? "Practice " + t.recommendedQuestions + " " + t.recommendedDifficulty?.toLowerCase() + " MCQs" : "No MCQs available"}
                 </Button>
               </li>
             ))}
