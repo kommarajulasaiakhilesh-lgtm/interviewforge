@@ -121,3 +121,20 @@ Keep the agreed API-first Java backend and separate Lovable frontend. The first 
 - The local backend JAR repackage has previously failed while renaming the existing JAR. Restart/package verification and local runtime preview remain unresolved; Phase 15 Flyway V14 has not been confirmed on local PostgreSQL.
 - Next planned work is Phase 18: sourced job and company guidance with freshness and provenance labels. Phase 19: voice interviews. Phase 20: isolated coding practice. Phase 21: goals and reminders.
 - Preserve the unrelated untracked files with “Copy” in their names; do not include them in project commits.
+
+## Phase 18 — Sourced company and job guidance (implementation, 2026-10-30)
+
+- Added company/optional-role guidance records with employer/editorial source type, source label and URL, publication date, last verification date, optional validity date, and soft deactivation.
+- Added authenticated company guidance reads and admin CRUD endpoints. Company-role association is checked, source URLs must be HTTP(S), and future or inconsistent dates are rejected.
+- Freshness is derived as recently verified (within 90 days), review due (older), or expired (validity date passed). Employer pages are outbound links; no scraped postings or vacancy availability claims are made.
+- Flyway V15 seeds official career/search/interview links for Amazon, Google, Infosys, Microsoft, and TCS, verified on 2026-10-30. API and schema docs updated.
+- `mvn test` passes all 14 tests, including three focused freshness tests; `git diff --check` passes. Local PostgreSQL/backend remain stopped; V14/V15 application should be checked at next startup.
+- Corrected the existing Phase 16 fallback explanation to display difficulty names in title case; this resolved a pre-existing failing assertion.
+
+## Phase 18 — Sourced company and job guidance (implementation underway, 2026-10-30)
+
+- Added company/optional-role guidance records with employer/editorial source type, source label and URL, publication date, last verification date, optional validity date, and soft deactivation.
+- Added authenticated company guidance reads and admin CRUD endpoints. Company-role association is checked, source URLs must be HTTP(S), and future or inconsistent dates are rejected.
+- Freshness is derived as recently verified (within 90 days), review due (older), or expired (validity date passed). Employer pages are outbound links; no scraped postings or vacancy availability claims are made.
+- Flyway V15 seeds official career/search/interview links for Amazon, Google, Infosys, Microsoft, and TCS, checked on 2026-10-30. API and schema docs updated.
+- Verification and delivery remain pending: focused JUnit tests, Maven build, git review, commit/push. Local PostgreSQL/backend remain stopped; V14/V15 application should be checked at next startup.

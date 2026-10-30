@@ -290,3 +290,14 @@ Example graph shape (IDs are existing active role/topic IDs):
   ]
 }
 ```
+## Sourced company and job guidance (Phase 18)
+
+All routes require authentication. Employer links are pointers to source pages; InterviewForge does not scrape job postings, claim a vacancy is open, or represent original practice questions as employer-authored.
+
+- `GET /api/v1/companies/{companyId}/guidance` returns active guidance for an active company. Optional `roleId` must be an active role belonging to that company; when supplied, company-wide resources and resources for that role are returned.
+- `GET /api/v1/admin/company-guidance` lists all records, including inactive records.
+- `POST /api/v1/admin/company-guidance` creates a guidance record; `PUT /api/v1/admin/company-guidance/{id}` updates it; `DELETE /api/v1/admin/company-guidance/{id}` soft-deactivates it.
+
+Input fields are `companyId`, optional `roleId`, `title`, `summary`, `resourceType` (`CAREERS_PAGE`, `JOB_SEARCH`, `INTERVIEW_GUIDANCE`), `sourceType` (`EMPLOYER_OFFICIAL`, `INTERVIEWFORGE_EDITORIAL`), `sourceLabel`, `sourceUrl` (HTTP/HTTPS only), optional `publishedOn`, required `lastVerifiedOn`, optional `validUntil`, and optional `active`. Dates use ISO `YYYY-MM-DD`. A role must belong to the selected company. Publication/verification dates cannot be in the future, publication cannot postdate verification, and validity cannot predate verification.
+
+Responses include company/role names, source attribution, dates, active state, and `freshness`: `RECENTLY_VERIFIED` through 90 days after the last verification, `REVIEW_DUE` after 90 days, or `EXPIRED` when `validUntil` is before today (which takes precedence). These dates are editorial review metadata, not guarantees that the external page or a vacancy remains available. V15 seeds verified employer career/interview links for Amazon, Google, Infosys, Microsoft, and TCS; no individual vacancy is seeded.

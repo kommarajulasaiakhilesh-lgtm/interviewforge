@@ -16,9 +16,9 @@
 14. Personal experience bank: save private STAR stories from work, projects, education, or volunteering and map them to competencies
 15. Market-aligned practice catalog: AI and machine learning, generative AI, data engineering, cloud platform engineering, cybersecurity, quality engineering, additional original MCQs, and company-associated role-preparation tracks
 
-Phases 1–17 have implementation commits. Phase 15's V14 migration still needs application to the local PostgreSQL database. Phase 16 adds adaptive study-plan difficulty and session sizing. Phase 17 adds deterministic written-answer coaching without external AI calls. The remaining add-on phases are:
+Phases 1–18 have implementation commits or code in the working phase. Phase 15's V14 migration still needs application to the local PostgreSQL database. Phase 16 adds adaptive study-plan difficulty and session sizing. Phase 17 adds deterministic written-answer coaching without external AI calls. Phase 18 adds sourced company/job guidance using official outbound links, source/freshness metadata, and soft-deactivated admin records; migration V15 must be applied at the next backend startup. Remaining add-on phases:
 
-18. Sourced job and company guidance: job links, freshness dates, clear separation of employer-authored guidance from original practice content, and no unsupported vacancy claims.
+18. Sourced job and company guidance: implemented; local migration/runtime verification remains.
 19. Voice mock interviews: spoken questions and follow-ups, transcript review, text fallback, and explicit audio privacy controls.
 20. Isolated coding practice: timed exercises and test results using a restricted execution service outside the main API.
 21. Goals and reminders: weekly goals, owner-scoped milestones, and opt-in in-app reminders.

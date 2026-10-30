@@ -14,6 +14,14 @@ Build one reviewable vertical slice at a time. Each phase should define its API 
 
 Phases 16–21 extend the stable core with adaptive practice, written-answer coaching, sourced job/company guidance, voice interviews, isolated coding exercises, and learner reminders. Keep external-provider usage optional, disclose data sent to providers, and never execute user code inside the main API process.
 
+## Phase 18 acceptance checklist
+
+- Each company can expose employer-authored career/search/interview guidance through attributable outbound links; optionally associate a resource with one of that company's roles.
+- Each resource records source type/label and publication, last-verified, and optional validity dates. Reads derive recently-verified, review-due, or expired state.
+- Admins can create, update, list, and soft-deactivate guidance. Invalid URLs, dates, and cross-company role references are rejected.
+- Seed only official source destinations; do not scrape or claim live job availability, and keep editorial InterviewForge content distinctly labeled.
+- Document endpoints, migration, freshness thresholds, and limitations. Add focused tests for freshness rules.
+
 ## Phase 1 acceptance checklist
 
 - Maven project uses the agreed Java/Spring stack.

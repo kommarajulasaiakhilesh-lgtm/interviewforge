@@ -38,8 +38,13 @@ final class AdaptivePracticeAdvisor {
         long count = available.getOrDefault(selected, 0L);
         int questions = (int) Math.min(MAX_QUESTIONS, count);
         String availabilityNote = selected == preferred ? "" :
-                " " + preferred + " questions are unavailable, so this session uses " + selected + " questions.";
+                " " + display(preferred) + " questions are unavailable, so this session uses " + display(selected) + " questions.";
         return new Recommendation(selected, questions, questions * 6, reason + availabilityNote);
+    }
+
+    private static String display(Difficulty difficulty) {
+        String value = difficulty.name().toLowerCase(java.util.Locale.ROOT);
+        return Character.toUpperCase(value.charAt(0)) + value.substring(1);
     }
 
     private static Difficulty firstAvailable(Difficulty preferred, Map<Difficulty, Long> available) {
