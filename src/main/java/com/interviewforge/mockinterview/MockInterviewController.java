@@ -24,6 +24,21 @@ public class MockInterviewController {
         return service.submit(principal.userId(), sessionId, request);
     }
 
+    @PostMapping("/{sessionId}/questions/{questionId}/follow-up")
+    public FollowUpResponse followUp(@AuthenticationPrincipal AppPrincipal principal, @PathVariable UUID sessionId,
+            @PathVariable UUID questionId, @Valid @RequestBody SubmitFollowUpRequest request) {
+        return service.submitFollowUp(principal.userId(), sessionId, questionId, request);
+    }
+
+    @GetMapping("/privacy")
+    public PrivacyPolicy privacy() { return service.privacyPolicy(); }
+
+    @DeleteMapping("/{sessionId}")
+    @org.springframework.web.bind.annotation.ResponseStatus(org.springframework.http.HttpStatus.NO_CONTENT)
+    public void delete(@AuthenticationPrincipal AppPrincipal principal, @PathVariable UUID sessionId) {
+        service.delete(principal.userId(), sessionId);
+    }
+
     @GetMapping("/{sessionId}")
     public SessionDetail detail(@AuthenticationPrincipal AppPrincipal principal, @PathVariable UUID sessionId) {
         return service.detail(principal.userId(), sessionId);

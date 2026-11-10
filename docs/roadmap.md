@@ -16,10 +16,10 @@
 14. Personal experience bank: save private STAR stories from work, projects, education, or volunteering and map them to competencies
 15. Market-aligned practice catalog: AI and machine learning, generative AI, data engineering, cloud platform engineering, cybersecurity, quality engineering, additional original MCQs, and company-associated role-preparation tracks
 
-Phases 1–18 have implementation commits or code in the working phase. Phase 15's V14 migration still needs application to the local PostgreSQL database. Phase 16 adds adaptive study-plan difficulty and session sizing. Phase 17 adds deterministic written-answer coaching without external AI calls. Phase 18 adds sourced company/job guidance using official outbound links, source/freshness metadata, and soft-deactivated admin records; migration V15 must be applied at the next backend startup. Remaining add-on phases:
+Phases 1–18 are implemented. Local database migration verification for V14 and V15 remains outstanding. Phase 16 adds adaptive study-plan difficulty and session sizing. Phase 17 adds deterministic written-answer coaching without external AI calls. Phase 18 adds sourced company/job guidance using official outbound links, source/freshness metadata, and soft-deactivated admin records. Phase 19 backend is implemented: voice-mode interview sessions, consent-gated transcript and follow-up saving, text fallback, and session deletion. Migration V16 and local preview runtime verification remain blocked until the PostgreSQL service can be started. Remaining add-on phases:
 
 18. Sourced job and company guidance: implemented; local migration/runtime verification remains.
-19. Voice mock interviews: spoken questions and follow-ups, transcript review, text fallback, and explicit audio privacy controls.
+19. Voice mock interviews: backend implemented; Lovable voice UI and local migration/runtime verification remain.
 20. Isolated coding practice: timed exercises and test results using a restricted execution service outside the main API.
 21. Goals and reminders: weekly goals, owner-scoped milestones, and opt-in in-app reminders.
 

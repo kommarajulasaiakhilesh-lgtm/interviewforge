@@ -36,6 +36,7 @@ public class MockInterviewService {
     }
 
     public CreateResponse create(UUID userId, CreateRequest request) {
+        InterviewMode mode = request.mode() == null ? InterviewMode.TEXT : request.mode();
         CompanyRole role = activeRole(request.roleId());
         List<SkillTopic> mappings = activeMappings(role.getId());
         if (mappings.isEmpty()) throw new InsufficientQuestionsException(request.questionCount(), 0);
@@ -52,7 +53,7 @@ public class MockInterviewService {
         List<QuestionChoice> selected = candidates.stream().limit(request.questionCount()).toList();
         if (selected.size() < request.questionCount()) throw new InsufficientQuestionsException(request.questionCount(), selected.size());
 
-        MockInterviewSession session = sessions.save(new MockInterviewSession(userId, role.getId(), role.getName(), request.questionCount()));
+        MockInterviewSession session = sessions.save(new MockInterviewSession(userId, role.getId(), role.getName(), request.questionCount(), mode));
         int position = 1;
         for (QuestionChoice choice : selected) {
             Question q = choice.question(); SkillTopic m = choice.mapping();
@@ -71,9 +72,34 @@ public class MockInterviewService {
                 .orElseThrow(() -> new ResourceNotFoundException("Question in mock interview", request.questionId()));
         if (item.getAnsweredAt() != null) throw new IllegalArgumentException("This interview question has already been answered.");
         if (!StringUtils.hasText(request.answerText())) throw new IllegalArgumentException("answerText must not be blank.");
-        item.submit(request.answerText().trim(), request.selfRating());
+        MockInterviewPrivacyPolicy.requireTranscriptConsent(session.getMode(), request.transcriptConsent());
+        item.submit(request.answerText().trim(), request.selfRating(), session.getMode() == InterviewMode.VOICE);
         session.recordAnswer();
         return new AnswerResponse(summary(session), item.getQuestionId(), item.getSelfRating());
+    }
+
+    public FollowUpResponse submitFollowUp(UUID userId, UUID sessionId, UUID questionId, SubmitFollowUpRequest request) {
+        MockInterviewSession session = sessions.findOwnedForUpdate(sessionId, userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Mock interview", sessionId));
+        MockInterviewItem item = items.findBySessionIdAndQuestionId(sessionId, questionId)
+                .orElseThrow(() -> new ResourceNotFoundException("Question in mock interview", questionId));
+        if (item.getAnsweredAt() == null) throw new IllegalArgumentException("Answer the interview question before its follow-up.");
+        if (!StringUtils.hasText(item.getFollowUpPrompt())) throw new IllegalArgumentException("This question has no follow-up prompt.");
+        if (item.getFollowUpAnsweredAt() != null) throw new IllegalArgumentException("This follow-up has already been answered.");
+        if (!StringUtils.hasText(request.answerText())) throw new IllegalArgumentException("answerText must not be blank.");
+        MockInterviewPrivacyPolicy.requireTranscriptConsent(session.getMode(), request.transcriptConsent());
+        item.submitFollowUp(request.answerText().trim(), session.getMode() == InterviewMode.VOICE);
+        return new FollowUpResponse(sessionId, questionId, item.getFollowUpAnsweredAt());
+    }
+
+    @Transactional(readOnly = true)
+    public PrivacyPolicy privacyPolicy() {
+        return new PrivacyPolicy(false, false, true, true, true, MockInterviewPrivacyPolicy.NOTICE);
+    }
+
+    public void delete(UUID userId, UUID sessionId) {
+        MockInterviewSession session = owned(userId, sessionId);
+        sessions.delete(session);
     }
 
     @Transactional(readOnly = true)
@@ -84,7 +110,8 @@ public class MockInterviewService {
         List<SkillResult> results = bySkill.values().stream().map(this::skillResult)
                 .sorted(Comparator.comparingInt(SkillResult::importance).reversed().thenComparing(SkillResult::skillName, String.CASE_INSENSITIVE_ORDER)).toList();
         return new SessionDetail(summary(session), sessionItems.stream().map(this::answerDetail).toList(), results,
-                "Skill results report completion and the weighted average of your 1–5 self-ratings (skill importance × topic relevance). Answers are captured for review and are not automatically graded.");
+                "Skill results report completion and the weighted average of your 1–5 self-ratings (skill importance × topic relevance). Answers are captured for review and are not automatically graded.",
+                MockInterviewPrivacyPolicy.NOTICE);
     }
 
     @Transactional(readOnly = true)
@@ -133,14 +160,16 @@ public class MockInterviewService {
     }
 
     private SessionSummary summary(MockInterviewSession s) {
-        return new SessionSummary(s.getId(), s.getRoleId(), s.getRoleName(), s.getStatus(), s.getQuestionCount(), s.getAnsweredCount(), s.getStartedAt(), s.getCompletedAt());
+        return new SessionSummary(s.getId(), s.getRoleId(), s.getRoleName(), s.getStatus(), s.getQuestionCount(), s.getAnsweredCount(),
+                s.getStartedAt(), s.getCompletedAt(), s.getMode(), s.isAudioStored());
     }
     private QuestionPrompt prompt(MockInterviewItem i) { return new QuestionPrompt(i.getQuestionId(), i.getPosition(), i.getSkillName(), i.getTitle(), i.getQuestionText(), i.getDifficulty()); }
     private AnswerDetail answerDetail(MockInterviewItem i) {
         return new AnswerDetail(i.getQuestionId(), i.getPosition(), i.getSkillName(), i.getTitle(), i.getQuestionText(), i.getDifficulty(),
                 i.getSubmittedAnswerText(), i.getSelfRating(), i.getAnsweredAt(), i.getAnsweredAt() == null ? null : i.getEvaluationCriteria(),
                 i.getAnsweredAt() == null ? null : i.getFollowUpPrompt(),
-                i.getAnsweredAt() == null ? null : new WrittenAnswerCoach().coach(i.getSubmittedAnswerText(), i.getEvaluationCriteria()));
+                i.getAnsweredAt() == null ? null : new WrittenAnswerCoach().coach(i.getSubmittedAnswerText(), i.getEvaluationCriteria()),
+                i.getTranscriptConsentAt(), i.getFollowUpAnswerText(), i.getFollowUpAnsweredAt(), i.getFollowUpTranscriptConsentAt());
     }
     private record SkillTopic(UUID skillId, String skillName, int importance, UUID topicId, int relevance, int weight) { }
     private record QuestionChoice(Question question, SkillTopic mapping) { }

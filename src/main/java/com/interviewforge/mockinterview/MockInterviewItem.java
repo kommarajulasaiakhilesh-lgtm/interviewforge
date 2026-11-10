@@ -25,6 +25,10 @@ public class MockInterviewItem {
     @Column(name = "answered_at") private Instant answeredAt;
     @Column(name = "evaluation_criteria", columnDefinition = "text") private String evaluationCriteria;
     @Column(name = "follow_up_prompt", columnDefinition = "text") private String followUpPrompt;
+    @Column(name = "transcript_consent_at") private Instant transcriptConsentAt;
+    @Column(name = "follow_up_answer_text", columnDefinition = "text") private String followUpAnswerText;
+    @Column(name = "follow_up_answered_at") private Instant followUpAnsweredAt;
+    @Column(name = "follow_up_transcript_consent_at") private Instant followUpTranscriptConsentAt;
 
     protected MockInterviewItem() { }
 
@@ -38,7 +42,14 @@ public class MockInterviewItem {
         this.evaluationCriteria = evaluationCriteria; this.followUpPrompt = followUpPrompt;
     }
 
-    public void submit(String answer, int rating) { submittedAnswerText = answer; selfRating = rating; answeredAt = Instant.now(); }
+    public void submit(String answer, int rating, boolean transcriptConsentRequired) {
+        submittedAnswerText = answer; selfRating = rating; answeredAt = Instant.now();
+        if (transcriptConsentRequired) transcriptConsentAt = answeredAt;
+    }
+    public void submitFollowUp(String answer, boolean transcriptConsentRequired) {
+        followUpAnswerText = answer; followUpAnsweredAt = Instant.now();
+        if (transcriptConsentRequired) followUpTranscriptConsentAt = followUpAnsweredAt;
+    }
     public UUID getQuestionId() { return questionId; }
     public UUID getTopicId() { return topicId; }
     public UUID getSkillId() { return skillId; }
@@ -54,4 +65,8 @@ public class MockInterviewItem {
     public Instant getAnsweredAt() { return answeredAt; }
     public String getEvaluationCriteria() { return evaluationCriteria; }
     public String getFollowUpPrompt() { return followUpPrompt; }
+    public Instant getTranscriptConsentAt() { return transcriptConsentAt; }
+    public String getFollowUpAnswerText() { return followUpAnswerText; }
+    public Instant getFollowUpAnsweredAt() { return followUpAnsweredAt; }
+    public Instant getFollowUpTranscriptConsentAt() { return followUpTranscriptConsentAt; }
 }

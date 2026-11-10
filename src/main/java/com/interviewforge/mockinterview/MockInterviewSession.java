@@ -12,6 +12,8 @@ public class MockInterviewSession {
     @Column(name = "role_id", nullable = false) private UUID roleId;
     @Column(name = "role_name", nullable = false, length = 120) private String roleName;
     @Enumerated(EnumType.STRING) @Column(nullable = false, length = 16) private MockInterviewStatus status;
+    @Enumerated(EnumType.STRING) @Column(name = "interview_mode", nullable = false, length = 12) private InterviewMode mode;
+    @Column(name = "audio_stored", nullable = false) private boolean audioStored;
     @Column(name = "question_count", nullable = false) private int questionCount;
     @Column(name = "answered_count", nullable = false) private int answeredCount;
     @Column(name = "started_at", nullable = false) private Instant startedAt;
@@ -19,9 +21,10 @@ public class MockInterviewSession {
 
     protected MockInterviewSession() { }
 
-    public MockInterviewSession(UUID userId, UUID roleId, String roleName, int questionCount) {
+    public MockInterviewSession(UUID userId, UUID roleId, String roleName, int questionCount, InterviewMode mode) {
         this.id = UUID.randomUUID(); this.userId = userId; this.roleId = roleId; this.roleName = roleName;
-        this.questionCount = questionCount; this.status = MockInterviewStatus.IN_PROGRESS; this.startedAt = Instant.now();
+        this.questionCount = questionCount; this.mode = mode; this.audioStored = false;
+        this.status = MockInterviewStatus.IN_PROGRESS; this.startedAt = Instant.now();
     }
 
     public void recordAnswer() {
@@ -34,6 +37,8 @@ public class MockInterviewSession {
     public UUID getRoleId() { return roleId; }
     public String getRoleName() { return roleName; }
     public MockInterviewStatus getStatus() { return status; }
+    public InterviewMode getMode() { return mode; }
+    public boolean isAudioStored() { return audioStored; }
     public int getQuestionCount() { return questionCount; }
     public int getAnsweredCount() { return answeredCount; }
     public Instant getStartedAt() { return startedAt; }

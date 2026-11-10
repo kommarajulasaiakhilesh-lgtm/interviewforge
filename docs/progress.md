@@ -131,6 +131,15 @@ Keep the agreed API-first Java backend and separate Lovable frontend. The first 
 - `mvn test` passes all 14 tests, including three focused freshness tests; `git diff --check` passes. Local PostgreSQL/backend remain stopped; V14/V15 application should be checked at next startup.
 - Corrected the existing Phase 16 fallback explanation to display difficulty names in title case; this resolved a pre-existing failing assertion.
 
+## Phase 19 — Voice mock interviews (backend underway, 2026-11-10)
+
+- Extended mock interviews with optional `VOICE` mode while keeping omitted mode compatible with existing typed sessions.
+- API accepts reviewed transcript text only. Every saved voice answer and follow-up requires explicit transcript consent and records its timestamp. Audio is never accepted or stored; the privacy endpoint explains browser speech-processing limits and typed fallback.
+- Added owner-scoped follow-up answer and whole-session deletion endpoints. Existing authored follow-up prompts and deterministic written coaching are reused.
+- Added Flyway V16 for mode, enforced no-audio storage, transcript-consent timestamps, and follow-up text. Focused consent tests and API/database docs were added.
+- `mvn test` passes all 16 tests, including two focused transcript-consent tests. Local migration/runtime and preview remain pending because Windows denied access to start the installed PostgreSQL service and its protected data directory.
+- Preserve unrelated untracked `Copy` files and keep Lovable frontend code unchanged until the backend phases are complete.
+
 ## Phase 18 — Sourced company and job guidance (implementation underway, 2026-10-30)
 
 - Added company/optional-role guidance records with employer/editorial source type, source label and URL, publication date, last verification date, optional validity date, and soft deactivation.
